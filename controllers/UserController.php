@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . './../models/User.php';
-
+require_once __DIR__ . '/../controllers/AuthMiddleware.php';
 class UserController {
     private $userModel;
-
+    private $authMiddleware;
     public function __construct($db) {
         $this->userModel = new User($db);
+        $this->authMiddleware = new AuthMiddleware();
     }
 
     public function processRequest($id) {
@@ -42,6 +43,18 @@ class UserController {
 
     // 1. Lấy danh sách
     private function getAll() {
+        //lớp bảo vệ check admin
+        $this->authMiddleware->isAuthenticatedAdmin();
+
+
+
+
+        //----------------------
+
+
+
+
+
         $stmt = $this->userModel->getAll();
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($users);

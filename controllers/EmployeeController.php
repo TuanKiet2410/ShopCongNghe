@@ -1,9 +1,14 @@
 <?php
 require_once './models/Employee.php';
+require_once './controllers/AuthMiddleware.php';
 
 class EmployeeController{
     private $model;
-    public function __construct($db) { $this->model = new Employee($db); }
+    private $authMiddleware;
+    public function __construct($db) { 
+        $this->model = new Employee($db); 
+        $this->authMiddleware = new AuthMiddleware();
+    }
     public function processRequest($id) {
         $method = $_SERVER['REQUEST_METHOD'];
         header('Content-Type: application/json');
@@ -23,6 +28,13 @@ class EmployeeController{
         }
     }
     private function getAll() {
+        //lớp bảo vệ check admin
+        $this->authMiddleware->isAuthenticatedAdmin();
+        
+
+        //------------------------
+
+
         $stmt = $this->model->getAll();
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     }

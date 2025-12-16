@@ -10,23 +10,57 @@ require_once __DIR__ . '/../controllers/InvoiceController.php';
 require_once __DIR__ . '/../controllers/VoucherController.php';
 require_once __DIR__ . '/../controllers/BannerController.php';
 require_once __DIR__ . '/../controllers/Invoice_detailController.php';
-class Router {
+require_once __DIR__ . '/../controllers/AuthController.php';
+class Router
+{
     private $db;
+    private $auth;
     public function __construct($db)
     {
         $this->db = $db;
+        $this->auth = new AuthController($this->db);
     }
-    public function handle($url){
-        $parts = explode('/',$url);
+    public function handle($url)
+    {
+
+        // ❗ CẮT ?page=1
+        $path = parse_url($url, PHP_URL_PATH);
+
+        // products hoặc products/5
+        $parts = explode('/', trim($path, '/'));
+
         $resource = $parts[0] ?? null;
         $id = $parts[1] ?? null;
-        //đều hướng bằng đều kiện switch
-        switch($resource){
+
+        if($resource=='login') {
+            $this->auth->login();
+            return;
+        }
+
+
+        switch ($resource) {
             case 'users':
-                $controller = new UserController($this->db);
-                $controller->processRequest($id);
+                $action = isset($_GET['action']) ? $_GET['action'] : '';
+                if ($action == 'login') {
+                    $this->auth->login();
+                    return;
+                }
+                if ($action == 'admin') {
+                    $this->auth->login();
+                    $this->auth->checkAdmin();
+                    return;
+                }
+                if ($action == 'signup') {
+                    $controller = new UserController($this->db);
+                    $controller->processRequest($id);
+                    return;
+                } else {
+                    $controller = new UserController($this->db);
+                    $controller->processRequest($id);
+                }
                 break;
-            case 'products': // Thêm case cho sản phẩm
+
+            case 'products':
                 $controller = new ProductController($this->db);
                 $controller->processRequest($id);
                 break;
@@ -34,7 +68,7 @@ class Router {
                 $controller = new CustomerController($this->db);
                 $controller->processRequest($id);
                 break;
-            case 'employees': // Thêm case cho sản phẩm
+            case 'employees':
                 $controller = new EmployeeController($this->db);
                 $controller->processRequest($id);
                 break;
@@ -56,10 +90,8 @@ class Router {
                 break;
             default:
                 http_response_code(404);
-                echo json_encode(["message" => "Đương dẫn ngoài phạm vi"]);
+                echo json_encode(["message" => "Đường dẫn ngoài phạm vi"]);
                 break;
         }
     }
-
 }
-?>

@@ -1,0 +1,45 @@
+<div class="d-flex" id="wrapper">
+  
+  <div class="bg-dark text-white border-end" id="sidebar-wrapper">
+    <div class="sidebar-heading py-4 px-3 fs-4 fw-bold border-bottom border-secondary">
+      <i class="bi bi-speedometer2 me-2"></i> Admin CP
+    </div>
+    
+    <div class="list-group list-group-flush my-3">
+      <a routerLink="/admin/users" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
+         <i class="bi bi-people-fill me-2"></i> Quản lý User
+      </a>
+      
+      <a routerLink="/admin/products" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
+         <i class="bi bi-box-seam me-2"></i> Quản lý Sản phẩm
+      </a>
+      
+      <a routerLink="/admin/banners" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
+         <i class="bi bi-images me-2"></i> Quản lý Banner
+      </a>
+      
+      <a routerLink="/admin/orders" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
+         <i class="bi bi-receipt me-2"></i> Quản lý Hóa đơn
+      </a>
+      
+      <a routerLink="/admin/roles" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
+         <i class="bi bi-shield-lock-fill me-2"></i> Phân quyền
+      </a>
+    </div>
+
+    <div class="mt-auto p-3 border-top border-secondary">
+      <button class="btn btn-danger w-100" routerLink="/"><i class="bi bi-box-arrow-left"></i> Đăng xuất</button>
+    </div>
+  </div>
+
+  <div id="page-content-wrapper" class="w-100 bg-light">
+    <nav class="navbar navbar-light bg-white shadow-sm px-4 mb-4">
+      <span class="navbar-brand mb-0 h1">Hệ thống quản trị</span>
+      <span class="text-muted small">Xin chào, Admin</span>
+    </nav>
+
+    <div class="container-fluid px-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

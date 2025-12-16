@@ -1,0 +1,139 @@
+/* Sidebar Filter */
+.filter-sidebar {
+  position: sticky; /* Giữ sidebar cố định khi cuộn trang */
+  top: 100px;
+}
+
+.filter-sidebar .form-check-input:checked {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.rating-filter i {
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.rating-filter i:hover {
+  transform: scale(1.2);
+}
+
+.opacity-50 {
+  opacity: 0.3 !important; /* Làm mờ các sao chưa chọn */
+}
+
+/* Search Bar */
+.search-group input:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+.search-group {
+  max-width: 500px;
+}
+
+/* Product Card (Kế thừa style từ Home hoặc viết mới) */
+.product-card {
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.card-img-wrapper {
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-top {
+  max-height: 100%;
+  width: auto;
+  transition: transform 0.5s;
+}
+
+/* Hiệu ứng zoom ảnh và hiện nút khi hover */
+.overlay-actions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.product-card:hover .overlay-actions {
+  opacity: 1;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+/* Pagination Custom */
+.pagination .page-link {
+  color: var(--secondary-color);
+  border-radius: 50%; /* Nút tròn */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+  border: none;
+}
+
+.pagination .active .page-link {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.pagination .page-link:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+
+
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Style cho trang đang được chọn */
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination button:disabled {
+  background-color: #eee;
+  cursor: not-allowed;
+  color: #999;
+}

@@ -1,0 +1,61 @@
+<div class="container py-5">
+  <div class="text-center mb-5 animate-down">
+    <h2 class="display-5 fw-bold text-glow-white">SĂN DEAL KHỦNG 🎁</h2>
+    <p class="text-white fs-5">Cập nhật các chương trình khuyến mãi mới nhất tại TechStore</p>
+    <div class="divider mx-auto"></div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6" *ngFor="let promo of promotions_list()">
+      
+      <div class="card promo-card h-100 border-0 shadow-sm overflow-hidden">
+        <div class="row g-0 h-100">
+          
+          <div class="col-md-5 position-relative">
+            <img [src]="promo.image" class="img-fluid h-100 w-100 object-fit-cover promo-img" [alt]="promo.image">
+            
+            <div class="discount-badge">
+              <span class="fw-bold">{{ promo.discount_value }}</span>
+            </div>
+            
+            <div class="date-overlay d-md-none">
+              <small>{{ promo.start_date | date:'dd/MM' }} - {{ promo.end_date | date:'dd/MM' }}</small>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <div class="card-body d-flex flex-column h-100">
+              
+              <div class="mb-2">
+                <span class="badge rounded-pill" 
+                      [ngClass]="isActive ? 'bg-success' : 'bg-secondary'">
+                  {{ isActive ? 'Đang diễn ra' : 'Sắp diễn ra' }}
+                </span>
+              </div>
+
+              <h5 class="card-title fw-bold text-dark">{{ promo.description }}</h5>
+              <p class="card-text text-muted small flex-grow-1">Số lượng: {{ promo.quantity }}</p>
+
+              <div class="time-box bg-light p-2 rounded mb-3 border d-flex align-items-center gap-2">
+                <i class="bi bi-clock-history text-primary"></i>
+                <div class="small text-secondary">
+                  <div>Bắt đầu: <span class="fw-bold text-dark">{{ promo.start_date | date:'dd/MM/yyyy' }}</span></div>
+                  <div>Kết thúc: <span class="fw-bold text-danger">{{ promo.end_date | date:'dd/MM/yyyy' }}</span></div>
+                </div>
+              </div>
+
+              <div class="coupon-area dashed-border p-2 d-flex justify-content-between align-items-center bg-white rounded">
+                <div class="code fw-bold text-primary">{{ promo.id }}</div>
+                <button class="btn btn-sm btn-gradient text-black" (click)="copyCode(promo.id)">
+                  Sao chép
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="auth-wrapper my-4">
+  <div class="auth-card animate-fade ">
+    <div class="text-center mb-4">
+      <i class="bi bi-shop display-4 text-primary"></i>
+    </div>
+    <h2 class="auth-title">Đăng Nhập</h2>
+    
+    <form (ngSubmit)="onLogin()">
+      <div class="mb-3 input-group auth-input-group">
+        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input type="username" class="form-control py-2" placeholder="username của bạn" [(ngModel)]="loginData.username" name="username" required>
+      </div>
+
+      <div class="mb-3 input-group auth-input-group">
+        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+        <input type="password" class="form-control py-2" placeholder="Mật khẩu" [(ngModel)]="loginData.password" name="password" required>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="rememberMe">
+          <label class="form-check-label small text-muted" for="rememberMe">Ghi nhớ tôi</label>
+        </div>
+        <a routerLink="/forgot-password" class="small text-decoration-none fw-bold">Quên mật khẩu?</a>
+      </div>
+
+      <button type="submit" class="btn btn-auth w-100 rounded-pill mb-3">ĐĂNG NHẬP</button>
+
+      <div class="text-center small text-muted">
+        Chưa có tài khoản? <a routerLink="/register" class="fw-bold text-decoration-none">Đăng ký ngay</a>
+      </div>
+      
+      <div class="text-center mt-4">
+        <p class="small text-muted mb-2">Hoặc đăng nhập với</p>
+        <button class="btn btn-light btn-sm border rounded-circle mx-1"><i class="bi bi-google text-danger"></i></button>
+        <button class="btn btn-light btn-sm border rounded-circle mx-1"><i class="bi bi-facebook text-primary"></i></button>
+      </div>
+    </form>
+  </div>
+</div>

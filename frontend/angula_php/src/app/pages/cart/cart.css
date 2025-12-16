@@ -1,0 +1,71 @@
+/* Custom Checkbox Size */
+.form-check-input {
+  width: 1.3em;
+  height: 1.3em;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: blue;
+  border-color: var(--secondary-color);
+}
+
+/* Ảnh sản phẩm */
+.cart-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+/* Bộ điều khiển số lượng (Quantity Control) */
+.qty-control {
+  width: 120px;
+}
+
+.qty-control .btn {
+  border-color: #dee2e6;
+}
+
+.qty-control .btn:hover {
+  background-color: #f8f9fa;
+  color: var(--secondary-color);
+}
+
+.qty-control input {
+  border-color: #dee2e6;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+/* Summary Card (Bên phải) */
+.summary-card {
+  position: sticky; /* Giữ cố định khi cuộn */
+  top: 100px;
+  background: #fdfdfd;
+}
+
+/* Nút thanh toán gradient */
+.btn-gradient {
+  background: var(--primary-gradient);
+  border: none;
+  transition: opacity 0.3s, transform 0.2s;
+}
+
+.btn-gradient:hover:not([disabled]) {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.btn-gradient:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .qty-control {
+    width: 100px;
+  }
+}

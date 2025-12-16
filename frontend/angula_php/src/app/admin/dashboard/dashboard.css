@@ -1,0 +1,31 @@
+#wrapper {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  width: 250px;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.list-group-item {
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  padding-left: 25px;
+}
+
+/* Style cho link đang được chọn */
+.active-link {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border-radius: 0 25px 25px 0;
+}

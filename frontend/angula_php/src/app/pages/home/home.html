@@ -1,0 +1,88 @@
+
+
+
+<div id="homeCarousel" class="carousel slide hero-section" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button *ngFor="let banner of banners; let i = index" 
+            type="button" 
+            data-bs-target="#homeCarousel" 
+            [attr.data-bs-slide-to]="i" 
+            [class.active]="i === 0" 
+            aria-current="true"></button>
+  </div>
+  
+  <div class="carousel-inner">
+    <div class="carousel-item" *ngFor="let banner of banners; let i = index" [class.active]="i === 0">
+      <div class="overlay-gradient"></div>
+      <img [src]="banner.image" class="d-block w-100 banner-img" [alt]="banner.title">
+      <div class="carousel-caption d-none d-md-block text-start">
+        <h1 class="display-4 fw-bold animate-up delay-1">{{ banner.title }}</h1>
+        <p class="lead animate-up delay-2">{{ banner.subtitle }}</p>
+        <button class="btn btn-primary btn-lg rounded-pill px-4 animate-up delay-3">Mua ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold display-6 text-glow-white">SẢN PHẨM HOT DEAL 🔥</h2>
+    <p class="text-white">Săn ngay kẻo lỡ, ưu đãi có hạn trong tuần này</p>
+    <div class="divider mx-auto"></div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-6 col-md-3" *ngFor="let product of hotProducts">
+      <div class="card product-card h-100 border-0 shadow-sm">
+        
+        <div class="badge-hot" *ngIf="product.isHot">HOT</div>
+        
+        <div class="card-img-wrapper">
+          <img [src]="product.image" class="card-img-top" [alt]="product.name">
+          <div class="card-actions">
+            <button class="btn btn-light rounded-circle shadow-sm"><i class="bi bi-heart"></i></button>
+            <button class="btn btn-light rounded-circle shadow-sm ms-2"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-truncate" [title]="product.name">{{ product.name }}</h5>
+          
+          <div class="text-warning small mb-2">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+          </div>
+
+          <div class="mt-auto">
+            <div *ngIf="product.discountPrice; else normalPrice">
+              <span class="text-decoration-line-through text-muted small me-2">{{ product.price | number }}đ</span>
+              <span class="fw-bold text-danger fs-5">{{ product.discountPrice | number }}đ</span>
+            </div>
+            <ng-template #normalPrice>
+              <span class="fw-bold text-primary fs-5">{{ product.price | number }}đ</span>
+            </ng-template>
+          </div>
+
+          <button class="btn btn-outline-primary w-100 mt-3 rounded-pill btn-add-cart">
+            <i class="bi bi-cart-plus me-1"></i> Thêm vào giỏ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+</section>

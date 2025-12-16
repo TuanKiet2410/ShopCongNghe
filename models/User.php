@@ -135,21 +135,33 @@ class User {
 
         if($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // 1. Kiểm tra tài khoản có bị khóa không
+         
+            $this->is_locked = $row['is_locked'];
+            $this->role = $row['role'];
+                // 1. Kiểm tra tài khoản có bị khóa không
             if ($row['is_locked'] == 1) {
                 return "LOCKED";
             }
-
+       
             // 2. Kiểm tra mật khẩu (So sánh pass nhập vào với pass mã hóa trong DB)
             if(password_verify($this->password, $row['password'])) {
                 // Đăng nhập thành công, gán lại các giá trị để sử dụng
                 $this->id = $row['id'];
                 $this->role = $row['role'];
                 return true;
+            }else{
+                echo json_encode(["status" => "error", "message" => "Sai mật khẩu", "password" => $this->password, "hash" => $row['password']]);
             }
+            
+            
         }
         return false;
     }
+
+
+
+
+
+
 }
 ?>

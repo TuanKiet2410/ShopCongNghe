@@ -1,0 +1,55 @@
+/* Card thanh toán */
+.payment-card {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: white;
+}
+
+.payment-card:hover {
+  border-color: #b0b8c1;
+}
+
+/* Khi được chọn */
+.payment-card.selected {
+  border-color: var(--secondary-color); /* Dùng màu tím từ biến global */
+  background-color: rgba(118, 75, 162, 0.05); /* Màu tím nhạt */
+  position: relative;
+}
+
+/* Nút đặt hàng gradient */
+.btn-gradient {
+  background: var(--primary-gradient);
+  border: none;
+  transition: opacity 0.3s;
+}
+
+.btn-gradient:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+}
+
+/* QR Code Placeholder */
+.qr-placeholder {
+  border: 1px solid #ddd;
+  padding: 10px;
+  display: inline-block;
+}
+
+/* Scroll cho list items nếu quá dài */
+.checkout-items {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Custom Scrollbar */
+.checkout-items::-webkit-scrollbar {
+  width: 5px;
+}
+.checkout-items::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}

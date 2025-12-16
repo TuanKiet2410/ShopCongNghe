@@ -1,0 +1,149 @@
+<div class="container py-5">
+  <div class="row g-4">
+    
+    <div class="col-lg-7">
+      <h4 class="mb-3 fw-bold">Thông tin giao hàng</h4>
+      <form class="needs-validation mb-5">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="customer.name" name="name" placeholder="Nguyễn Văn A" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="customer.phone" name="phone" placeholder="09xxxxxxx" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="customer.email" name="email" placeholder="email@example.com">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Địa chỉ nhận hàng <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="customer.address" name="address" placeholder="Số nhà, đường, phường, quận..." required>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Ghi chú</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="customer.note" name="note" placeholder="Ví dụ: Giao hàng giờ hành chính"></textarea>
+          </div>
+        </div>
+      </form>
+
+      <h4 class="mb-3 fw-bold">Phương thức thanh toán</h4>
+      <div class="payment-methods">
+        <div class="payment-card" [class.selected]="paymentMethod === 'cod'" (click)="paymentMethod = 'cod'">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="cod" value="cod" [(ngModel)]="paymentMethod">
+            <label class="form-check-label fw-bold" for="cod">Thanh toán khi nhận hàng (COD)</label>
+          </div>
+          <div class="text-muted small ms-4">Bạn chỉ phải thanh toán khi đã nhận và kiểm tra hàng.</div>
+        </div>
+
+        <div class="payment-card mt-3" [class.selected]="paymentMethod === 'banking'" (click)="paymentMethod = 'banking'">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="banking" value="banking" [(ngModel)]="paymentMethod">
+            <label class="form-check-label fw-bold" for="banking">Chuyển khoản Ngân hàng (QR Code)</label>
+          </div>
+          <div class="text-muted small ms-4">Quét mã QR để thanh toán nhanh chóng, an toàn.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm bg-light">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-4">Đơn hàng của bạn</h5>
+          
+          <div class="checkout-items mb-4">
+            <div class="d-flex align-items-center mb-3" *ngFor="let item of items">
+              <div class="position-relative">
+                <img [src]="item.image" class="rounded border" width="60" height="60" style="object-fit: cover;">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                  {{item.quantity}}
+                </span>
+              </div>
+              <div class="ms-3 flex-grow-1">
+                <h6 class="mb-0 text-truncate" style="max-width: 180px;">{{item.name}}</h6>
+                <small class="text-muted">{{item.price | number}}đ</small>
+              </div>
+              <div class="fw-bold">{{ (item.price * item.quantity) | number}}đ</div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Mã giảm giá (Thử: TECH100)" [(ngModel)]="voucherCode" name="voucher">
+            <button class="btn btn-dark" type="button" (click)="applyVoucher()">Áp dụng</button>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>Tạm tính</span>
+            <span class="fw-bold">{{subTotal | number}}đ</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Phí vận chuyển</span>
+            <span>{{shippingFee | number}}đ</span>
+          </div>
+          <div class="d-flex justify-content-between mb-3 text-success" *ngIf="discountAmount > 0">
+            <span>Giảm giá</span>
+            <span>-{{discountAmount | number}}đ</span>
+          </div>
+
+          <hr>
+          
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="fw-bold fs-5">Tổng cộng</span>
+            <span class="fw-bold fs-3 text-primary">{{finalTotal | number}}đ</span>
+          </div>
+
+          <button class="btn btn-gradient w-100 py-3 rounded fw-bold text-white shadow-sm" (click)="placeOrder()">
+            ĐẶT HÀNG NGAY
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="openBankModalBtn" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#bankModal"></button>
+
+<div class="modal fade" id="bankModal" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title w-100 fw-bold text-primary">Thanh toán qua Ngân hàng</h5>
+      </div>
+      <div class="modal-body">
+        <p class="mb-4">Vui lòng quét mã QR bên dưới để thanh toán</p>
+        
+        <div class="qr-placeholder mx-auto mb-4 p-2 border rounded bg-white" style="width: 200px;">
+           <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=ExamplePaymentData" alt="QR Code" class="img-fluid">
+        </div>
+
+        <h4 class="fw-bold text-danger mb-3">{{finalTotal | number}}đ</h4>
+        
+        <div *ngIf="isProcessingBanking" class="d-flex align-items-center justify-content-center text-muted">
+           <div class="spinner-border spinner-border-sm me-2 text-primary" role="status"></div>
+           Đang chờ xác nhận giao dịch... (5s)
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button id="closeBankModalBtn" type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Hủy bỏ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop show" *ngIf="showSuccessModal" style="opacity: 0.5;"></div>
+<div class="modal d-block" *ngIf="showSuccessModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-5">
+      <div class="mb-3">
+        <i class="bi bi-check-circle-fill text-success display-1"></i>
+      </div>
+      <h3 class="fw-bold text-success">Đặt hàng thành công!</h3>
+      <p class="text-muted">Cảm ơn bạn đã mua sắm tại TechStore.<br>Hóa đơn điện tử đã được gửi vào email của bạn.</p>
+      <button class="btn btn-primary mt-3" routerLink="/">Về trang chủ ngay</button>
+    </div>
+  </div>
+</div>

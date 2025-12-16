@@ -1,0 +1,117 @@
+/* Navbar Styling */
+.modern-navbar {
+  background: var(--primary-gradient);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Brand/Logo */
+.modern-navbar .navbar-brand {
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+
+.modern-navbar .navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+/* Links */
+.modern-navbar .nav-link {
+  color: var(--text-light) !important;
+  font-weight: 500;
+  margin: 0 10px;
+  position: relative;
+  transition: color 0.3s;
+}
+
+/* Hiệu ứng gạch chân khi hover */
+.modern-navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  transition: width 0.3s ease;
+}
+
+.modern-navbar .nav-link:hover,
+.modern-navbar .nav-link.active {
+  color: #fff !important;
+}
+
+.modern-navbar .nav-link:hover::after,
+.modern-navbar .nav-link.active::after {
+  width: 100%;
+}
+
+/* Custom Toggler (Icon menu mobile) */
+.custom-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.custom-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Icons wrapper */
+.icon-wrapper {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-wrapper:hover {
+  transform: translateY(-3px);
+}
+
+/* Blink animation cho thẻ Hot */
+.animate-blink {
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.6; }
+}
+
+/* Nút Login */
+.btn-login {
+  transition: all 0.3s;
+  border: none;
+}
+
+.btn-login:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+  color: var(--secondary-color);
+}
+
+/* Khoảng cách để nội dung không bị che bởi navbar fixed */
+:host {
+  display: block;
+  /* Nếu dùng fixed-top navbar thì cần margin hoặc padding ở body/container chính */
+}
+
+li a{
+  text-shadow:
+      0 0 10px #fff,      /* Lớp 1: Sáng trắng sát chữ */
+      0 0 30px #fff,     /* Lớp 2: Hơi mờ ra ngoài */
+      0 0 31px rgb(255, 255, 255),     /* Lớp 3: Màu chủ đạo (Xanh neon) */
+      0 0 42px rgb(255, 255, 255),     /* Lớp 4: Tỏa rộng hơn */
+      0 0 10px rgb(255, 255, 255);     /* Lớp 5: Tỏa rất rộng làm nền không gian */
+}
+
+
+.den-mo {
+        /* Màu đen với độ trong suốt 50% */
+        background-color: rgba(0, 0, 0, 0.5); 
+        
+
+        
+        padding: 15px;
+        border-radius: 8px; /* Bo góc cho đẹp */
+    }
+

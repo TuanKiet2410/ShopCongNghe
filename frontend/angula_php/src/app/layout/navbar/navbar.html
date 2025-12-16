@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg fixed-top modern-navbar den-mo">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-white d-flex align-items-center gap-2" routerLink="/">
+      <i class="bi bi-shop h4 mb-0"></i>
+      <span>TechStore</span>
+    </a>
+
+    <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active">Sản phẩm</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/promotions" routerLinkActive="active">Khuyến mãi <span class="badge bg-danger animate-blink">Hot</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/admin">Quản trị</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-3 actions-area">
+        <div class="icon-wrapper">
+          <div class="mb-3 p-2 bg-white">
+            {{user()}}
+          </div>
+          
+        </div>
+        
+        <a routerLink="/cart" class="icon-wrapper position-relative">
+          <i class="bi bi-cart3 text-white h5 mb-0"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+            3
+          </span>
+        </a>
+
+        <a routerLink="/login" class="btn btn-light rounded-pill px-4 fw-bold shadow-sm btn-login">
+          Đăng nhập
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

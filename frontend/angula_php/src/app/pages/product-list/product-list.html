@@ -1,0 +1,139 @@
+
+
+<div class="container py-5">
+  <div class="row">
+    
+    <div class="col-lg-3 mb-4">
+      <div class="filter-sidebar p-4 shadow-sm rounded bg-white">
+        <h5 class="fw-bold mb-3 d-flex align-items-center">
+          <i class="bi bi-funnel me-2 text-primary"></i> Bộ lọc tìm kiếm
+        </h5>
+
+        <div class="mb-4">
+          <label class="fw-bold mb-2 small text-uppercase text-muted">Danh mục</label>
+          <select class="form-select" [(ngModel)]="selectedCategory" (change)="applyFilter()">
+            <option value="Tất cả">Tất cả danh mục</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="fw-bold mb-2 small text-uppercase text-muted">Thương hiệu</label>
+          <div class="form-check" *ngFor="let brand of brands">
+            <input class="form-check-input" type="radio" name="brandGroup" 
+                   [value]="brand" [(ngModel)]="selectedBrand" (change)="applyFilter()" [id]="'brand-'+brand">
+            <label class="form-check-label" [for]="'brand-'+brand">{{brand}}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="brandGroup" 
+                   value="Tất cả" [(ngModel)]="selectedBrand" (change)="applyFilter()" id="brand-all">
+            <label class="form-check-label" for="brand-all">Tất cả</label>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="fw-bold mb-2 small text-uppercase text-muted">Mức giá</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="priceGroup" value="all" [(ngModel)]="selectedPriceRange" (change)="applyFilter()" id="p-all">
+            <label class="form-check-label" for="p-all">Tất cả</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="priceGroup" value="under-10" [(ngModel)]="selectedPriceRange" (change)="applyFilter()" id="p-1">
+            <label class="form-check-label" for="p-1">Dưới 10 triệu</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="priceGroup" value="10-30" [(ngModel)]="selectedPriceRange" (change)="applyFilter()" id="p-2">
+            <label class="form-check-label" for="p-2">Từ 10 - 30 triệu</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="priceGroup" value="over-30" [(ngModel)]="selectedPriceRange" (change)="applyFilter()" id="p-3">
+            <label class="form-check-label" for="p-3">Trên 30 triệu</label>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="fw-bold mb-2 small text-uppercase text-muted">Đánh giá</label>
+          <div class="rating-filter">
+             <i class="bi bi-star-fill text-warning" (click)="selectedRating=5; applyFilter()" [class.opacity-50]="selectedRating!=5"></i>
+             <i class="bi bi-star-fill text-warning" (click)="selectedRating=4; applyFilter()" [class.opacity-50]="selectedRating!=4"></i>
+             <i class="bi bi-star-fill text-warning" (click)="selectedRating=3; applyFilter()" [class.opacity-50]="selectedRating!=3"></i>
+             <i class="bi bi-star-fill text-warning" (click)="selectedRating=2; applyFilter()" [class.opacity-50]="selectedRating!=2"></i>
+             <i class="bi bi-star-fill text-warning" (click)="selectedRating=1; applyFilter()" [class.opacity-50]="selectedRating!=1"></i>
+             <span class="ms-2 small text-muted">Trở lên</span>
+          </div>
+        </div>
+
+        <button class="btn btn-outline-danger w-100 rounded-pill" (click)="resetFilter()">
+          <i class="bi bi-arrow-counterclockwise"></i> Đặt lại
+        </button>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="bg-white p-3 rounded shadow-sm mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="input-group search-group flex-grow-1">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-primary"></i></span>
+          <input type="text" class="form-control border-start-0 ps-0" 
+                 placeholder="Tìm kiếm sản phẩm..." [(ngModel)]="searchText" (keyup.enter)="onchangesearch()">
+        </div>
+        <div class="sort-group d-flex align-items-center">
+          <span class="me-2 text-muted small text-nowrap">Sắp xếp:</span>
+          <select class="form-select form-select-sm border-0 bg-light" [(ngModel)]="selectedSort" (change)="applyFilter()">
+            <option value="default">Mới nhất</option>
+            <option value="price-asc">Giá tăng dần</option>
+            <option value="price-desc">Giá giảm dần</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-12 text-center py-5" *ngIf="filteredProducts.length === 0">
+          <img src="https://cdn-icons-png.flaticon.com/512/7486/7486754.png" width="100" class="mb-3 opacity-50">
+          <h5 class="text-muted">Không tìm thấy sản phẩm nào!</h5>
+        </div>
+
+        <div class="col-md-4 col-sm-6" *ngFor="let p of filteredProducts">
+          <div class="card product-card h-100 border-0 shadow-sm">
+            <div class="card-img-wrapper position-relative overflow-hidden">
+              <img [src]="p.image" class="card-img-top" [alt]="p.name">
+              <div class="overlay-actions d-flex justify-content-center align-items-center gap-2">
+                <button class="btn btn-light rounded-circle"><i class="bi bi-cart-plus"></i></button>
+                <button class="btn btn-light rounded-circle"><i class="bi bi-eye"></i></button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-light text-dark border">{{p.brand}}</span>
+                <div class="small text-warning">
+                  <span class="fw-bold text-dark me-1">{{p.price}}</span><i class="bi bi-star-fill"></i>
+                </div>
+              </div>
+              <h6 class="card-title fw-bold text-truncate">{{p.name}}</h6>
+              <div class="mt-2">
+                <span class="fw-bold text-primary fs-5">{{p.price | number}}đ</span>
+                <span class="text-decoration-line-through text-muted small ms-2">{{p.price | number}}đ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+    &laquo; Trước
+  </button>
+
+  <button 
+    *ngFor="let page of pageNumbers" 
+    (click)="goToPage(page)"
+    [class.active]="currentPage === page">
+    {{ page }}
+  </button>
+
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+    Sau &raquo;
+  </button>
+</div>
+    </div>
+  </div>
+</div>

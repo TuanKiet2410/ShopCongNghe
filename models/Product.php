@@ -141,5 +141,54 @@ class Product {
         printf("Lỗi: %s.\n", $stmt->errorInfo()[2]);
         return false;
     }
+
+
+    /** lấy pro duc thông qua vị trí bắt đầu và kết thúc */
+    public function getProducts($start, $end) {
+        $query = "SELECT * FROM " . $this->table . " ORDER BY id DESC LIMIT $start, $end";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt;
+    }
+    public function countAllProducts() {
+        $query = "SELECT * FROM " . $this->table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->rowCount();
+    }
+    
+public function search($keyword, $offset, $limit) {
+    // Lưu ý: Thêm LIMIT và OFFSET vào câu query
+    $query = "SELECT * FROM products 
+              WHERE name LIKE :keyword 
+              LIMIT :limit OFFSET :offset"; 
+
+    $stmt = $this->conn->prepare($query);
+
+    // Bind dữ liệu
+    $keyword = "%{$keyword}%";
+    $stmt->bindParam(':keyword', $keyword);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+    $stmt->execute();
+    return $stmt;
 }
+
+public function countSearchProducts($keyword) {
+    $query = "SELECT COUNT(*) as total FROM products WHERE name LIKE :keyword";
+    
+    $stmt = $this->conn->prepare($query);
+    
+    $keyword = "%{$keyword}%";
+    $stmt->bindParam(':keyword', $keyword);
+    
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    return $row['total'];
+}
+
+}
+
 ?>

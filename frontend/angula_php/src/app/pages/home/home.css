@@ -1,0 +1,172 @@
+/* --- HERO / BANNER SECTION --- */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-img {
+  height: 500px; /* Chiều cao cố định cho banner */
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+  filter: brightness(0.85); /* Làm tối ảnh một chút để chữ nổi bật */
+}
+
+/* Lớp phủ gradient nhẹ để chữ dễ đọc hơn */
+.overlay-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+  z-index: 1;
+}
+
+.carousel-caption {
+  z-index: 2;
+  bottom: 20%;
+  left: 10%;
+}
+
+/* Animation trượt lên cho chữ */
+.animate-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- SECTION HEADER --- */
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.divider {
+  height: 4px;
+  width: 60px;
+  background: var(--primary-gradient);
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+/* --- PRODUCT CARD --- */
+.product-card {
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-10px); /* Nhấc card lên khi hover */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+
+/* Ảnh sản phẩm */
+.card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-top {
+  max-height: 100%;
+  width: auto;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.1); /* Zoom ảnh nhẹ khi hover */
+}
+
+/* Badge HOT */
+.badge-hot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4757;
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 20px;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(255, 71, 87, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Các nút hành động nhanh (Mắt, Tim) */
+.card-actions {
+  position: absolute;
+  bottom: -50px; /* Ẩn bên dưới */
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  transition: bottom 0.3s ease;
+}
+
+.product-card:hover .card-actions {
+  bottom: 15px; /* Trượt lên khi hover */
+}
+
+.card-actions .btn:hover {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+}
+
+/* Nút thêm vào giỏ */
+.btn-add-cart {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+  transition: all 0.3s;
+}
+
+.btn-add-cart:hover {
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+}
+
+/* Mobile responsive fixes */
+@media (max-width: 768px) {
+  .banner-img {
+    height: 250px;
+  }
+  .display-4 {
+    font-size: 1.8rem;
+  }
+}
+
+.text-glow-white {
+    /* Tạo bóng màu trắng tỏa ra xung quanh */
+    text-shadow: 0 0 2px #ffffff, 0 0 5px #ffffff;
+    /* Màu chữ nên là màu tối để tương phản với viền sáng */
+    color: #333 !important; 
+}
+
+
+
+

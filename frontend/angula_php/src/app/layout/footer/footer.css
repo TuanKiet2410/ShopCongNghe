@@ -1,0 +1,84 @@
+.footer-section {
+  background-color: var(--footer-bg);
+  border-top: 5px solid;
+  /* Sử dụng border-image để tạo viền gradient */
+  border-image: var(--primary-gradient);
+  border-image-slice: 1;
+}
+
+/* Hiệu ứng chữ gradient cho Logo footer */
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text; /* Chuẩn mới */
+  -webkit-text-fill-color: transparent;
+  font-size: 1.8rem;
+}
+
+/* Link trong footer */
+.footer-link {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.footer-link:hover {
+  color: #a78bfa; /* Màu tím nhạt sáng hơn */
+  padding-left: 5px; /* Trượt nhẹ sang phải */
+}
+
+/* Social Icons */
+.social-icons a {
+  color: #fff;
+  font-size: 1.2rem;
+  transition: transform 0.3s, color 0.3s;
+  display: inline-block;
+}
+
+.social-icons a:hover {
+  color: #667eea;
+  transform: translateY(-3px) rotate(10deg);
+}
+
+/* Nút đăng ký (Gradient) */
+.btn-gradient {
+  background: var(--primary-gradient);
+  border: none;
+  transition: opacity 0.3s;
+}
+
+.btn-gradient:hover {
+  opacity: 0.9;
+}
+
+/* Input Newsletter */
+.newsletter-input input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.newsletter-input input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #667eea;
+  box-shadow: none;
+  color: white;
+}
+
+.newsletter-input input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.den-mo {
+        /* Màu đen với độ trong suốt 50% */
+        background-color: rgba(0, 0, 0, 0.5); 
+        
+        /* Chữ màu trắng để dễ đọc trên nền đen */
+        color: white; 
+        
+        padding: 20px;
+        border-radius: 8px; /* Bo góc cho đẹp */
+    }

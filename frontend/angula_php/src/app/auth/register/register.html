@@ -1,0 +1,36 @@
+<div class="auth-wrapper my-4">
+  <div class="auth-card animate-fade">
+    <h2 class="auth-title">Tạo Tài Khoản</h2>
+    <p class="text-center text-muted small mb-4">Tham gia TechStore để nhận nhiều ưu đãi hấp dẫn</p>
+
+    <form (ngSubmit)="onRegister()">
+      <div class="mb-3 input-group auth-input-group">
+        <span class="input-group-text"><i class="bi bi-person"></i></span>
+        <input type="text" class="form-control py-2" placeholder="User name" [(ngModel)]="registerData.name" name="name" required>
+      </div>
+
+      <div class="mb-3 input-group auth-input-group">
+        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+        <input type="password" class="form-control py-2" placeholder="Mật khẩu" [(ngModel)]="registerData.password" name="password" required>
+      </div>
+      
+      <div class="mb-3 input-group auth-input-group">
+        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+        <input type="password" class="form-control py-2" placeholder="Nhập lại mật khẩu" [(ngModel)]="registerData.confirmPassword" name="confirmPassword" required>
+      </div>
+
+      <div class="form-check mb-4">
+        <input class="form-check-input" type="checkbox" id="terms" required>
+        <label class="form-check-label small text-muted" for="terms">
+          Tôi đồng ý với <a href="#" class="text-decoration-none">Điều khoản & Chính sách</a>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-auth w-100 rounded-pill mb-3">ĐĂNG KÝ</button>
+
+      <div class="text-center small text-muted">
+        Đã có tài khoản? <a routerLink="/login" class="fw-bold text-decoration-none">Đăng nhập</a>
+      </div>
+    </form>
+  </div>
+</div>

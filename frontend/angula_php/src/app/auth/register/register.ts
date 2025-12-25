@@ -8,16 +8,17 @@ import { AuthService } from '../../services/auth/auth-service';
   templateUrl: './register.html', styleUrls: ['./register.css'] })
 export class RegisterComponent {
   authService = inject(AuthService);
-  registerData = { name: '', email: '', password: '', confirmPassword: '' };
+  registerData = { name: '', password: '', confirmPassword: '' };
 
   constructor(private router: Router) {}
- newUser = { username: '', password: '' };
   onRegister() {
     if (this.registerData.password !== this.registerData.confirmPassword) {
       alert('Mật khẩu nhập lại không khớp!');
       return;
     }
-    this.authService.signup(this.registerData.name, this.registerData.password);
+    const newUser = { username: this.registerData.name, password: this.registerData.password,role: 'user' };
+
+    this.authService.signup(newUser);
     this.router.navigate(['/login']);
   }
 }

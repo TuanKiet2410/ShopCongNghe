@@ -25,10 +25,14 @@
       <a routerLink="/admin/roles" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
          <i class="bi bi-shield-lock-fill me-2"></i> Phân quyền
       </a>
+
+      <a routerLink="/admin/permissions" routerLinkActive="active-link" class="list-group-item list-group-item-action bg-transparent text-white-50">
+         <i class="bi bi-shield-lock-fill me-2"></i> Phân quyền permission
+      </a>
     </div>
 
     <div class="mt-auto p-3 border-top border-secondary">
-      <button class="btn btn-danger w-100" routerLink="/"><i class="bi bi-box-arrow-left"></i> Đăng xuất</button>
+      <button class="btn btn-danger w-100" (click)="signOut()" routerLink="/"><i class="bi bi-box-arrow-left"></i> Đăng xuất</button>
     </div>
   </div>
 

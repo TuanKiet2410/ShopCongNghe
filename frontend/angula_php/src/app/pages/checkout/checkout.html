@@ -21,10 +21,10 @@
             <label class="form-label">Địa chỉ nhận hàng <span class="text-danger">*</span></label>
             <input type="text" class="form-control" [(ngModel)]="customer.address" name="address" placeholder="Số nhà, đường, phường, quận..." required>
           </div>
-          <div class="col-12">
+          <!-- <div class="col-12">
             <label class="form-label">Ghi chú</label>
-            <textarea class="form-control" rows="2" [(ngModel)]="customer.note" name="note" placeholder="Ví dụ: Giao hàng giờ hành chính"></textarea>
-          </div>
+            <textarea class="form-control" rows="2" [(ngModel)]="customer." name="note" placeholder="Ví dụ: Giao hàng giờ hành chính"></textarea>
+          </div> -->
         </div>
       </form>
 
@@ -54,7 +54,7 @@
           <h5 class="fw-bold mb-4">Đơn hàng của bạn</h5>
           
           <div class="checkout-items mb-4">
-            <div class="d-flex align-items-center mb-3" *ngFor="let item of items">
+            <div class="d-flex align-items-center mb-3" *ngFor="let item of items() ">
               <div class="position-relative">
                 <img [src]="item.image" class="rounded border" width="60" height="60" style="object-fit: cover;">
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
@@ -93,7 +93,7 @@
           
           <div class="d-flex justify-content-between align-items-center mb-4">
             <span class="fw-bold fs-5">Tổng cộng</span>
-            <span class="fw-bold fs-3 text-primary">{{finalTotal | number}}đ</span>
+            <span class="fw-bold fs-3 text-primary" >{{finalTotal | number}}đ</span>
           </div>
 
           <button class="btn btn-gradient w-100 py-3 rounded fw-bold text-white shadow-sm" (click)="placeOrder()">

@@ -2,21 +2,18 @@
 
 
 <div id="homeCarousel" class="carousel slide hero-section" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button *ngFor="let banner of banners; let i = index" 
-            type="button" 
-            data-bs-target="#homeCarousel" 
-            [attr.data-bs-slide-to]="i" 
-            [class.active]="i === 0" 
-            aria-current="true"></button>
-  </div>
-  
+
+  <div class="content">
+          <video autoplay muted loop playsinline>
+            <source src="assets/videos/iphone17.mp4" type="video/mp4" />
+          </video>
+        </div>
   <div class="carousel-inner">
     <div class="carousel-item" *ngFor="let banner of banners; let i = index" [class.active]="i === 0">
-      <div class="overlay-gradient"></div>
-      <img [src]="banner.image" class="d-block w-100 banner-img" [alt]="banner.title">
-      <div class="carousel-caption d-none d-md-block text-start">
-        <h1 class="display-4 fw-bold animate-up delay-1">{{ banner.title }}</h1>
+      <div class=""></div>
+      <div  class="d-block w-100 banner-img" >
+      <div class="carousel-caption d-none d-md-block text-start ">
+        <h1 class="display-2 fw-bold animate-up delay-1 ">{{ banner.title }}</h1>
         <p class="lead animate-up delay-2">{{ banner.subtitle }}</p>
         <button class="btn btn-primary btn-lg rounded-pill px-4 animate-up delay-3">Mua ngay</button>
       </div>
@@ -86,3 +83,4 @@
 
 
 </section>
+</div>

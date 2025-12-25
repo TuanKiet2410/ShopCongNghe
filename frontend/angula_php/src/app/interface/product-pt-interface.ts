@@ -2,9 +2,9 @@ export interface Product_PT_Interface{
     status: string;
     pagination: {
         current_page: number;
-        limiy: number;
+        limit: number;
         total_pages: number;
-        total_item: number;
+        total_items: number;
     };
     data:[
         

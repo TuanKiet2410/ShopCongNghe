@@ -1,8 +1,9 @@
 export interface userNameManageInterface {
-    id: number;
+    id?: number;
     username: string;
-    role: string;
-    permission: string;
-    is_Locked: string;
-    create_at: string;
+    password?: string;
+    role?: string;
+    permission?: string[];
+    is_locked?: number;
+    create_at?: string;
 }

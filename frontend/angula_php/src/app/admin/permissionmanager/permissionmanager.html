@@ -1,0 +1,94 @@
+<!-- Sử dụng các lớp tiện ích của Bootstrap 5 -->
+<div class="bg-light" style="min-height: 100vh">
+  <div class="container-lg py-5">
+    <div class="bg-white shadow-lg rounded-3 overflow-hidden">
+      <!-- Header -->
+      <header class="bg-xanhngoc bg-gradient text-white p-4 p-md-5">
+        <h1 class="h2 text-white mb-1">Bảng điều khiển phân quyền</h1>
+        <p class="text-white-50 mb-0">Quản lý quyền truy cập của người dùng trong hệ thống</p>
+      </header>
+     
+      <!-- Danh sách người dùng -->
+      <div class="p-4 p-md-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="h4 mb-0 text-dark">Danh sách người dùng</h2>
+          <span class="badge bg-secondary rounded-pill fs-6">
+            Tổng cộng: {{ users().length }}
+          </span>
+        </div>
+         <div>
+        <button class="btn btn-primary me-2" (click)="enableEdit()" [disabled]="isEditing()">
+           Edit
+        </button>
+        <button class="btn btn-success me-2" (click)="saveAllChanges()" [disabled]="!isEditing()">
+           Save
+        </button>
+        <button class="btn btn-secondary" (click)="cancelEdit()" [disabled]="!isEditing()">
+           Cancel
+        </button>
+      </div>
+        <!-- Bảng phân quyền -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="p-3 text-start">Người dùng</th>
+                <!-- 
+                      Tự động tạo các cột header cho các quyền có thể chỉnh sửa 
+                    -->
+                @for (perm of editablePermissions; track perm) {
+                <th scope="col" class="p-3 text-center text-uppercase small">
+                  {{ perm }}
+                </th>
+                }
+                <th scope="col" class="p-3 text-center text-uppercase small">Đọc (READ)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 
+                    Lặp qua từng người dùng và hiển thị 
+                  -->
+              @for (user of users(); track user.id) {
+              <tr>
+                <!-- Thông tin người dùng -->
+                <td class="p-3">
+                  <div class="fw-bold text-dark">{{ user.username }}</div>
+                  <div class="small text-muted">{{ user.islocked }}</div>
+                </td>
+
+                <!-- 
+                        Tạo các ô checkbox cho các quyền có thể chỉnh sửa 
+                      -->
+                @for (perm of editablePermissions; track perm) {
+                <td class="p-3 text-center">
+                  <input
+                    type="checkbox"
+                    class="form-check-input fs-5"
+                    [checked]="hasPermission(user, perm)"
+                    (change)="togglePermission(user, perm)"
+                    [disabled]="!isEditing()"
+                  />
+                </td>
+                }
+
+                <!-- 
+                        Ô 'READ' đặc biệt: Luôn được chọn và bị vô hiệu hóa
+                      -->
+                <td class="p-3 text-center">
+                  <input
+                    type="checkbox"
+                    class="form-check-input fs-5 opacity-50"
+                    [checked]="true"
+                    [disabled]="!isEditing()"
+                    aria-label="Read permission is mandatory"
+                  />
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

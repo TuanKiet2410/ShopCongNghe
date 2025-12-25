@@ -6,7 +6,7 @@ import { VoucherInterface } from '../../interface/voucher';
   providedIn: 'root',
 })
 export class VoucherService {
-  apiurl = 'http://localhost/DAPHP2/vouchers';
+  apiurl = 'http://localhost/DA_CD_PHP/vouchers';
   vouchers_signal = signal<VoucherInterface[]>([]);
   constructor(private http: HttpClient) {
     this.loadVouchers();

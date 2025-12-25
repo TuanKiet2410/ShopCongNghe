@@ -5,33 +5,9 @@
     width: 100%;
     height: 100%;
     overflow-x: hidden; /* Ẩn thanh cuộn */
+  overflow-y: visible;
   }
 
-  .content {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Để video nằm dưới nội dung khác */
-    background-color: #000; /* Màu nền dự phòng */
-  }
 
-  video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    
-    /* MẤU CHỐT Ở ĐÂY: */
-    /* Khi xoay 90 độ, chiều rộng video phải bằng chiều cao màn hình (100vh) */
-    width: 100vh; 
-    /* Chiều cao video phải bằng chiều rộng màn hình (100vw) */
-    height: 100vw; 
-    
-    /* Xoay -90 độ và căn giữa */
-    transform: translate(-50%, -50%) rotate(-90deg);
-    
-    /* Đảm bảo video phủ kín khung hình đã xoay */
-    object-fit: cover; 
-    
-  }
+
+

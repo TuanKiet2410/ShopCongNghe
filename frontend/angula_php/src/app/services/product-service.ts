@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class ProductService {
-  private apiUrl= 'http://localhost/DAPHP2/products';
+  private apiUrl= 'http://localhost/DA_CD_PHP/products';
   // tạo một signal lưu danh sách sản phâm
   products_signal= signal<ProductInterface[]>([]);
   constructor (private http: HttpClient ) {

@@ -13,13 +13,19 @@ import { RoleManagerComponent } from './admin/role-manager/role-manager';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password';
+import { Permissionmanager } from './admin/permissionmanager/permissionmanager';
+import { authGuard } from './guards/auth-guard';
+import { adminGuard } from './guards/admin-guard';
+import { buyGuard } from './guards/buy-guard';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
+    { path: 'home', component: HomeComponent },
     { path: 'products', component: ProductListComponent },
     { path: 'promotions', component: PromotionsComponent },
     { path: 'cart', component: CartComponent },
-    { path: 'checkout', component: CheckoutComponent },
+    { path: 'checkout',
+       component: CheckoutComponent,
+       canActivate: [buyGuard],},
     {
     path: 'admin',
     component: DashboardComponent, // Component cha chứa Menu
@@ -30,7 +36,10 @@ export const routes: Routes = [
       { path: 'banners', component: BannerManagerComponent },
       { path: 'orders', component: OrderManagerComponent },
       { path: 'roles', component: RoleManagerComponent },
-    ]
+      { path: 'permissions', component: Permissionmanager },
+
+    ],
+    canActivate: [authGuard,adminGuard],
   },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

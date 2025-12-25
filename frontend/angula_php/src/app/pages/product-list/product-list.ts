@@ -1,134 +1,139 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductService } from '../../services/product-service';
 import { ProductInterface } from '../../interface/product-interface';
 import { ProductPtService } from '../../phantrang/product-pt-service';
+import { Cartservice } from '../../services/cart/cartservice';
 
 @Component({
   selector: 'app-product-list',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './product-list.html',
-  styleUrls: ['./product-list.css']
+  styleUrls: ['./product-list.css'],
 })
 export class ProductListComponent implements OnInit {
-  producService = inject(ProductPtService);
-  product_List = computed(() => this.producService.products_signal());
 
-  // --- PHẦN 1: DỮ LIỆU ---
-  // Sửa: Khởi tạo rỗng, không gán snapshot cũ dễ gây lỗi
-  filteredProducts: ProductInterface[] = []; 
+  productService = inject(ProductPtService);
+  cartService = inject(Cartservice);
 
-  // --- PHẦN 2: FILTER ---
-  searchText: string = '';
-  selectedCategory: string = 'Tất cả';
-  selectedBrand: string = 'Tất cả';
-  selectedPriceRange: string = 'all';
-  selectedRating: number = 0;
+  // ===== SIGNAL =====
+  product_List = computed(() => this.productService.products_signal());
 
-  categories = ['Điện thoại', 'Laptop', 'Tablet', 'Phụ kiện'];
-  brands = ['Apple', 'Samsung', 'Dell', 'Sony'];
+  // ===== FILTER =====
+  searchText = '';
+  selectedCategory = '';
+  selectedBrand = '';
+  selectedPriceRange = '';
+  selectedSort = 'default';
 
-  // --- PHẦN 3: PHÂN TRANG ---
-  currentPage: number = 1;
-  itemsPerPage: number = 6; // Sửa: Nên để 6 hoặc 8 sản phẩm/trang cho dễ nhìn
-   // Sửa: Khởi tạo là 0, để code tự tính toán
-  totalPages: number = 0;
-// 1. THÊM BIẾN LƯU TRẠNG THÁI SẮP XẾP
-  selectedSort: string = 'default'; // default, price-asc, price-desc
+  categories = ['Tất cả', 'Điện thoại', 'Laptop', 'Tablet', 'Phụ kiện'];
+  brands = ['Tất cả', 'Apple', 'Samsung', 'Dell', 'Sony'];
 
-  // Getter tạo mảng số trang an toàn hơn
-  get pageNumbers(): number[] {
-    if (this.totalPages <= 0) return [];
-    return Array(this.totalPages).fill(0).map((_, i) => i + 1);
-  }
+  // ===== PAGINATION =====
+  currentPage = 1;
+  totalPages =0;
 
   constructor() {
-    // Effect tự động chạy khi signal product_List thay đổi (khi API trả về data)
+    this.loadData(1)
+    // Lắng nghe khi API trả dữ liệu
     effect(() => {
-      if (this.product_List().length > 0) {
-        this.totalPages = this.producService.total_pages;
-        this.currentPage = this.producService.current_page;
-        // Data về -> Chạy lọc lần đầu -> Tự động tính phân trang luôn
-        this.applyFilter(); 
-        console.log("Dữ liệu trong Component hiện tại là:", this.producService.products_signal());
-        console.log(this.totalPages)
-      }
+      const products = this.product_List();
+  const totalPages = this.productService.totalPagesSignal();
+  const currentPage = this.productService.currentPageSignal();
+
+  if (products.length > 0) {
+    this.totalPages = totalPages;
+    this.currentPage = currentPage;
+  }
     });
-   
   }
 
   ngOnInit(): void {
-    // --- SỬA LỖI QUAN TRỌNG NHẤT ---
-    // Phải gọi API thì mới có dữ liệu để signal hoạt động
-   // this.producService.loadProducts(); 
-    if(this.searchText){
-    this.producService.loadSearchProducts(this.searchText);
-   }
-    if (localStorage.getItem('token')) {
-    this.producService.loadProducts(1);
-  }
-   
+    // Load lần đầu
+    this.loadData(1);
   }
 
-  // --- LOGIC LỌC & PHÂN TRANG ---
+  // =================================================
+  // LOAD DATA (TRUNG TÂM)
+  // =================================================
+  loadData(page: number) {
+    this.productService.loadProducts(
+      page,
+      this.searchText,
+      this.selectedCategory,
+      this.selectedBrand,
+      this.selectedPriceRange
+    );
+
+  }
+
+  // =================================================
+  // APPLY FILTER
+  // =================================================
   applyFilter() {
-    // 1. Lọc dữ liệu từ nguồn gốc (Signal)
-   
-      this.filteredProducts = this.product_List().filter(product => {
-      const matchName = product.name.toLowerCase().includes(this.searchText.toLowerCase());
-      const matchCategory = this.selectedCategory === 'Tất cả' || product.category === this.selectedCategory;
-      const matchBrand = this.selectedBrand === 'Tất cả' || product.brand === this.selectedBrand;
-
-      let matchPrice = true;
-      if (this.selectedPriceRange === 'under-10') matchPrice = product.price < 10000000;
-      else if (this.selectedPriceRange === '10-30') matchPrice = product.price >= 10000000 && product.price <= 30000000;
-      else if (this.selectedPriceRange === 'over-30') matchPrice = product.price > 30000000;
-
-      return matchName && matchCategory && matchBrand && matchPrice;
-    });
-
-    // 5. Sắp xếp theo giá
-    if (this.selectedSort === 'price-asc') {
-      this.filteredProducts.sort((a, b) => a.price - b.price);
-    } else if (this.selectedSort === 'price-desc') {
-      this.filteredProducts.sort((a, b) => b.price - a.price);
-    }
-
+    this.currentPage = 1;
+    this.loadData(1);
   }
 
+  // =================================================
+  // SEARCH
+  // =================================================
+  onSearchChange() {
+    this.currentPage = 1;
+    this.loadData(1);
+    this.applyFilter();
+    
+  }
 
-
+  // =================================================
+  // PAGINATION
+  // =================================================
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.producService.loadProducts(page);
-      // Mẹo: Cuộn lên đầu trang khi chuyển trang
+      this.loadData(page);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-
-  resetFilter() {
-    this.searchText = '';
-    this.selectedCategory = 'Tất cả';
-    this.selectedBrand = 'Tất cả';
-    this.selectedPriceRange = 'all';
-    this.selectedRating = 0;
-    this.applyFilter();
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
+  // =================================================
+  // RESET FILTER
+  // =================================================
+  resetFilter() {
+    this.searchText = '';
+    this.selectedCategory = '';
+    this.selectedBrand = '';
+    this.selectedPriceRange = '';
+    this.selectedSort = 'default';
+    this.loadData(1);
+  }
 
-onchangesearch(){
-      if(this.searchText){
-    this.producService.loadSearchProducts(this.searchText);
-   }else{
-    this.producService.loadProducts(1);
-   }
+  // =================================================
+  // SORT (CLIENT SIDE)
+  // =================================================
+  get sortedProducts(): ProductInterface[] {
+    const products = [...this.product_List()];
 
-}
+    if (this.selectedSort === 'price-asc') {
+      return products.sort((a, b) => a.price - b.price);
+    }
 
+    if (this.selectedSort === 'price-desc') {
+      return products.sort((a, b) => b.price - a.price);
+    }
 
+    return products;
+  }
 
-
+  // =================================================
+  // ADD TO CART
+  // =================================================
+  addToCart(product: ProductInterface) {
+    this.cartService.addToCart({ ...product, quantity: 1 });
+  }
 }

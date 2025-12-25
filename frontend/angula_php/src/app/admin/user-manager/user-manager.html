@@ -2,33 +2,62 @@
   <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
     <h5 class="mb-0 fw-bold">Quản lý User</h5>
     <div class="d-flex gap-2">
-      <input type="text" class="form-control form-control-sm" placeholder="Tên User..." [(ngModel)]="newUser.name">
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Tên User..."
+        [(ngModel)]="newUser.username"
+      />
       <select class="form-select form-select-sm" [(ngModel)]="newUser.role">
         <option value="Admin">Admin</option>
         <option value="Employer">Employer</option>
         <option value="Customer">Customer</option>
       </select>
-      <button class="btn btn-sm btn-primary text-nowrap" (click)="addUser()">+ Thêm</button>
+      <button class="btn btn-sm btn-primary text-nowrap" (click)="isEditMode?updateUser():addUser()">{{isEditMode?'Cập nhật':'+ Them'}}</button>
     </div>
   </div>
   <div class="card-body p-0">
     <table class="table table-hover mb-0 align-middle">
-      <thead class="table-light"><tr><th>ID</th><th>Tên</th><th>Role</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Tên</th>
+          <th>Role</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
       <tbody>
         <tr *ngFor="let u of user_list()">
-          <td>{{u.id}}</td>
-          <td>{{u.username}}</td>
-          <td><span class="badge bg-secondary">{{u.role}}</span></td>
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
           <td>
-            <span class="badge" [ngClass]="u.is_Locked ? 'bg-danger' : 'bg-success'">
-              {{u.is_Locked ? 'Đã khóa' : 'Hoạt động'}}
+            <span class="badge bg-secondary">{{ u.role }}</span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="u.is_locked==1 ? 'bg-danger' : 'bg-success'">
+              {{ u.is_locked==1 ? 'Đã khóa' : 'Hoạt động' }}
             </span>
           </td>
           <td>
-            <button class="btn btn-sm me-2" [ngClass]="u.is_Locked ? 'btn-success' : 'btn-warning'" (click)="toggleLock(u)">
-              <i class="bi" [ngClass]="u.is_Locked ? 'bi-unlock' : 'bi-lock'"></i>
+            <button class="btn btn-warning btn-sm me-2"
+            (click)="editMode(u.username, u.id!)"
+            >
+              <i class="bi bi-pencil-square"></i> Chỉnh sửa
             </button>
-            <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(u.id)"><i class="bi bi-trash"></i></button>
+
+            <button
+              class="btn btn-sm me-2"
+              [ngClass]="u.is_locked==1 ? 'btn-success' : 'btn-warning'"
+              (click)="toggleLock(u)"
+            >
+              <i class="bi" [ngClass]="u.is_locked==1 ? 'bi-unlock' : 'bi-lock'"></i>
+            
+            </button>
+
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(u.id!)">
+              <i class="bi bi-trash"></i>
+            </button>
           </td>
         </tr>
       </tbody>

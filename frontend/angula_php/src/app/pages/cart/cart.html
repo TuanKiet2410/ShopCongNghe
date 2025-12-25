@@ -1,23 +1,23 @@
 <div class="container py-5">
   <h3 class="fw-bold mb-4 d-flex align-items-center">
     <i class="bi bi-cart3 me-2 text-primary"></i> Giỏ hàng của bạn
-    <span class="fs-6 text-muted ms-2">({{cartItems.length}} sản phẩm)</span>
+    <span class="fs-6 text-muted ms-2">({{cartItems().length}} sản phẩm)</span>
   </h3>
 
-  <div class="row" *ngIf="cartItems.length > 0; else emptyCart">
+  <div class="row" *ngIf="cartItems().length > 0; else emptyCart">
     <div class="col-lg-8">
       
       <div class="d-flex align-items-center bg-white p-3 rounded shadow-sm mb-3">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="checkAll" 
                  [checked]="isAllSelected()" (change)="toggleAll($event)">
-          <label class="form-check-label fw-bold" for="checkAll">Chọn tất cả ({{cartItems.length}})</label>
+          <label class="form-check-label fw-bold" for="checkAll">Chọn tất cả ({{cartItems().length}})</label>
         </div>
         <div class="ms-auto text-muted small"><i class="bi bi-trash"></i> Xóa mục đã chọn</div>
       </div>
 
       <div class="cart-list">
-        <div class="card border-0 shadow-sm mb-3" *ngFor="let item of cartItems">
+        <div class="card border-0 shadow-sm mb-3" *ngFor="let item of cartItems()">
           <div class="card-body">
             <div class="d-flex align-items-center">
               
@@ -82,7 +82,9 @@
 
           <button class="btn btn-gradient w-100 py-2 rounded-pill fw-bold text-black shadow-sm" 
                   [disabled]="selectedCount === 0"
-                  routerLink="/checkout">
+                  routerLink="/checkout"
+                  (click)="onCheckOut()">
+                  
             Tiến hành thanh toán ({{selectedCount}})
           </button>
         </div>

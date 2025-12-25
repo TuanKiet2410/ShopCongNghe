@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Checkout } from '../../services/checkout/checkout';
 
 @Component({
   selector: 'app-checkout',
@@ -10,21 +11,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./checkout.css']
 })
 export class CheckoutComponent implements OnInit {
-
-  // Thông tin người mua
-  customer = {
-    name: '',
-    phone: '',
-    address: '',
-    email: '',
-    note: ''
-  };
-
+  chehckoutService = inject(Checkout);
+    items = computed(() => this.chehckoutService.checkout_products());
   // Danh sách sản phẩm (Giả lập lấy từ Cart đã chọn)
-  items = [
-    { name: 'iPhone 15 Pro Max 256GB', price: 34000000, quantity: 1, image: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?auto=format&fit=crop&w=100&q=60' },
-    { name: 'Tai nghe Sony WH-1000XM5', price: 8500000, quantity: 2, image: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&w=100&q=60' }
-  ];
 
   paymentMethod: string = 'cod'; // Mặc định là COD
   voucherCode: string = '';
@@ -35,14 +24,40 @@ export class CheckoutComponent implements OnInit {
   isProcessingBanking: boolean = false;
   showSuccessModal: boolean = false;
 
-  constructor(private router: Router) { }
+  // Thông tin người mua
+   userStr = localStorage.getItem('user');
+ user = this.userStr ? JSON.parse(this.userStr) : null;
+
+
+   constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  customer = {
+    user_id:this.user?.user_id,
+    image:'',
+    name: '',
+    phone: '',
+    address: '',
+    email: '',
+  };
+  invoices={
+    user_id:this.user?.user_id,
+    voucher_id:1,
+    payment_method:this.paymentMethod,
+    status:'pending',
+    total_money:this.finalTotal,
+    
+  }
+
+ 
+
+
+
   // 1. Tính tổng tiền hàng
   get subTotal(): number {
-    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return this.items().reduce((sum, item) => sum + (item.price * item.quantity), 0);
   }
 
   // 2. Tính tổng thanh toán cuối cùng
@@ -69,10 +84,14 @@ export class CheckoutComponent implements OnInit {
     }
 
     if (this.paymentMethod === 'banking') {
+            this.invoices.payment_method = 'banking';
       // Mở Modal giả lập thanh toán ngân hàng
       this.openBankingSimulation();
+      this.chehckoutService.order(this.customer, this.invoices, this.items());
+      
     } else {
       // Thanh toán COD -> Thành công luôn
+      this.chehckoutService.order(this.customer, this.invoices, this.items());
       this.orderSuccess();
     }
   }
@@ -90,7 +109,7 @@ export class CheckoutComponent implements OnInit {
       // Đóng modal bank
       const closeBtn = document.getElementById('closeBankModalBtn');
       if (closeBtn) closeBtn.click();
-      
+
       this.orderSuccess();
     }, 5000); // 5 giây
   }

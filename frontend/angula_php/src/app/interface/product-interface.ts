@@ -8,6 +8,8 @@ export interface ProductInterface {
     category:string;
     brand:string;
     stock:number;
+    quantity:number;
+    selected:boolean;
 }
 
 

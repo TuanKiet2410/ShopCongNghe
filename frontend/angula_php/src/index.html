@@ -7,14 +7,245 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.23/build/spline-viewer.js"></script>
 </head>
 <body>
-  <div class="content">
-  <video autoplay muted loop playsinline>
-    <source src="assets/videos/iphone17.mp4" type="video/mp4" />
-  </video>
-</div>
 
   <app-root></app-root>
+
+  
+
+
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.27/build/spline-viewer.js"></script>
+<div id="spline-trigger"
+  style="position: fixed; bottom: 10px; right: 10px; width: 300px; height: 250px; z-index: 9998; cursor: pointer;">
+
+
+  <spline-viewer
+    url="https://prod.spline.design/aMZ57pv4yctrR3Wm/scene.splinecode"
+    loading-anim-type="spinner-small-dark"
+    style="width: 100%; height: 100%;">
+  </spline-viewer>
+
+  <div id="chat-tooltip" class="bg-white p-2 rounded shadow border text-start small fw-bold"
+    style="position: absolute; top: -40px; left: -5cm; width: 10cm;  animation: float 3s ease-in-out infinite; display: none;">
+    <div id="chat-content" class="card-body overflow-auto flex-grow-1" style="background: #f8f9fa; overflow-y: auto;min-height: 0;">
+    </div>
+  </div>
+</div>
+
+<div id="chat-box" class="card shadow-lg"
+  style="position: fixed; top: 0; left: 0; width: 320px; height: 100vh; z-index: 9999; 
+            display: flex; flex-direction: column; border-radius: 0; border-right: 1px solid #ccc;
+            transform: translateX(-100%); transition: transform 0.3s ease-in-out;">
+
+  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center rounded-0">
+    <h6 class="mb-0">💈 Nhập lệnh cho AI</h6>
+    <button id="close-chat" class="btn-close btn-close-white"></button>
+  </div>
+
+  <div id="chat-content2" class="card-body overflow-auto flex-grow-1" style="background: #f8f9fa;">
+    <div class="text-center text-muted small my-2">Lịch sử trò chuyện</div>
+  </div>
+
+  <div class="card-footer p-3 bg-white">
+    <div class="input-group">
+      <input type="text" id="user-input" class="form-control" placeholder="Nhập yêu cầu..." aria-label="Message">
+      <button class="btn btn-dark" id="send-btn">Gửi</button>
+    </div>
+    <small class="text-muted fst-italic mt-2 d-block text-center" style="font-size: 11px;">
+      Bấm Enter để gửi và đóng khung chat
+    </small>
+  </div>
+</div>
+
+<style>
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  /* Ẩn logo Spline (nếu muốn hack một chút, nhưng bản free vẫn có thể hiện) */
+  spline-viewer::part(logo) {
+    display: none;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const chatBtn = document.getElementById('spline-trigger');
+    const chatBox = document.getElementById('chat-box');
+    const closeChat = document.getElementById('close-chat');
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const chatContent = document.getElementById('chat-content');
+    const chatContent2 = document.getElementById('chat-content2');
+    const tooltip = document.getElementById('chat-tooltip');
+
+    // --- 1. Hàm Mở Sidebar (Tách ra để dùng chung) ---
+    function openSidebar() {
+      // Chỉ mở nếu nó đang đóng
+      if (chatBox.style.transform !== "translateX(0px)") {
+        chatBox.style.transform = "translateX(0)";
+        tooltip.style.display = 'none';
+        setTimeout(() => userInput.focus(), 100);
+      } else {
+        // Nếu đang mở rồi thì focus luôn
+        userInput.focus();
+      }
+    }
+
+    // --- 2. Hàm Đóng Sidebar ---
+    // --- 2. Hàm Đóng Sidebar ---
+    function closeSidebar() {
+      chatBox.style.transform = "translateX(-100%)";
+
+      // 🔥 QUAN TRỌNG: Bỏ focus khỏi ô nhập liệu
+      // Để lần sau bạn gõ phím, nó sẽ tính là gõ ngoài màn hình -> Kích hoạt mở lại
+      userInput.blur();
+    }
+
+    // Sự kiện Click vào con 3D
+    chatBtn.addEventListener('click', openSidebar);
+
+    // Sự kiện Click nút đóng
+    closeChat.addEventListener('click', closeSidebar);
+
+    // --- 3. SỰ KIỆN GÕ PHÍM TỰ ĐỘNG MỞ ---
+    document.addEventListener('keydown', function(event) {
+      const activeTag = document.activeElement.tagName.toLowerCase();
+
+      // Nếu đang gõ vào ô input/textarea nào đó thì bỏ qua
+      if (activeTag === 'input' || activeTag === 'textarea') {
+        return;
+      }
+
+      // Nếu phím là chữ/số và không phải phím chức năng
+      if (event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        openSidebar();
+        // (Tùy chọn) Focus xong thì điền luôn ký tự vừa gõ vào để đỡ mất chữ đầu tiên
+        // setTimeout(() => {
+        //     userInput.value += event.key;
+        // }, 110); 
+      }
+    });
+
+    // --- 4. Gửi tin nhắn ---
+    function sendMessage() {
+      const message = userInput.value.trim();
+      if (message === "") return;
+
+      // --- GỌI HÀM RESET NGAY TẠI ĐÂY ---
+      resetSpline();
+      // ----------------------------------
+
+      appendMessage('user', message);
+      userInput.value = '';
+
+      // Đóng chat và hiện tooltip bên phải
+      closeSidebar();
+
+      tooltip.style.display = 'block';
+      tooltip.style.width = 'auto';
+      tooltip.style.maxWidth = '250px';
+      tooltip.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Đang hỏi sếp...';
+
+      fetch('http://localhost/DA_CD_PHP/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: message
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          appendMessage('bot', data.reply);
+          typeWriterEffect(data.reply, tooltip);
+        })
+        .catch(error => {
+          tooltip.innerHTML = '❌ Lỗi kết nối!';
+        });
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    function typeWriterEffect(text, element) {
+      element.innerHTML = '';
+      let i = 0;
+      let speed = 30;
+
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    function appendMessage(sender, text) {
+      const div = document.createElement('div');
+      div.className = sender === 'user' ? 'd-flex justify-content-end mb-2' : 'd-flex justify-content-start mb-2';
+      const contentDiv = document.createElement('div');
+      contentDiv.className = sender === 'user' ? 'bg-dark text-white p-2 rounded shadow-sm' : 'bg-white text-dark p-2 rounded shadow-sm border';
+      contentDiv.style.maxWidth = '80%';
+      contentDiv.innerText = text;
+      div.appendChild(contentDiv);
+      chatContent.appendChild(div);
+      chatContent.scrollTop = chatContent.scrollHeight;
+      chatContent2.appendChild(div);
+      chatContent2.scrollTop = chatContent2.scrollHeight;
+    }
+  });
+
+  //tạm thời đánh lừa cho nó đùng nhìn theo con trỏ chuột
+  // Lấy thẻ Spline Viewer
+  const splineViewer = document.querySelector('spline-viewer');
+
+  // --- Hàm Reset vị trí 3D (Phiên bản nâng cao) ---
+    function resetSpline() {
+        const viewer = document.querySelector('spline-viewer');
+        
+        if (viewer && viewer.shadowRoot) {
+            // 1. Tìm cái Canvas vẽ 3D bên trong thẻ Spline
+            const canvas = viewer.shadowRoot.querySelector('canvas');
+            
+            if (canvas) {
+                // 2. Tạo một sự kiện giả: "Chuột đã rời đi" (mouseout)
+                const mouseOutEvent = new MouseEvent('mouseout', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                
+                // 3. Bắn sự kiện này thẳng vào canvas
+                canvas.dispatchEvent(mouseOutEvent);
+                
+                // 4. Bắn thêm sự kiện mouseleave cho chắc ăn
+                const mouseLeaveEvent = new MouseEvent('mouseleave', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                canvas.dispatchEvent(mouseLeaveEvent);
+            }
+        }
+    }
+</script>
 </body>
 </html>

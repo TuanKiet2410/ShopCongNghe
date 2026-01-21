@@ -1,4 +1,5 @@
 <?php
+
 include_once './config/Database.php';
 include_once './models/User.php';
 
@@ -28,7 +29,7 @@ class AuthController
         $this->model->password = $data->password;
         $result = $this->model->login();
 
-        if ($result === true) {
+        if ($result) {
             // --- ĐĂNG NHẬP THÀNH CÔNG ---
 
             // Tạo một token đơn giản (Trong thực tế nên dùng JWT)
@@ -59,6 +60,12 @@ class AuthController
         } else {
             echo json_encode(["status" => "error", "message" => "Sai tài khoản hoặc mật khẩu"]);
         }
+    }
+    //hàm logout
+    public function logout() {
+        session_destroy();
+        http_response_code(200);
+        echo json_encode(["status" => "success", "message" => "Đăng xuat thanh cong"]);
     }
 
     public function checkAdmin() {

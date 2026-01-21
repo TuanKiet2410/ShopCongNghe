@@ -1,8 +1,27 @@
 <?php
-session_start();
+
+// --- BẮT ĐẦU ĐOẠN CODE DEBUG ---
+// Code này sẽ ghi lại mọi dữ liệu Angular gửi lên vào file 'debug_log.txt'
+
+// 1. Lấy dữ liệu thô từ body request (JSON)
+$rawInput = file_get_contents("php://input");
+
+// 2. Tạo nội dung log
+$logContent = "----------------------------------------\n";
+$logContent .= "Thời gian: " . date('Y-m-d H:i:s') . "\n";
+$logContent .= "URL: " . $_SERVER['REQUEST_URI'] . "\n";
+$logContent .= "Method: " . $_SERVER['REQUEST_METHOD'] . "\n";
+$logContent .= "DỮ LIỆU GỬI LÊN (PAYLOAD):\n";
+$logContent .= $rawInput . "\n"; // Đây là cái bạn cần xem nhất
+$logContent .= "----------------------------------------\n\n";
+
+// 3. Ghi vào file debug_log.txt (Nằm cùng thư mục với index.php)
+file_put_contents('debug_log.txt', $logContent, FILE_APPEND);//FILE_APPEND sử dụng de ghi thêm với file, khong ghi trung lap
+// --- KẾT THÚC ĐOẠN CODE DEBUG ---
 // 1. Nhúng file cấu hình
 require_once 'config/database.php';
 require_once 'router/Router.php';
+require_once 'controllers/ChatController.php';
 
 // 2. Cấu hình CORS (Cho phép Angular port 4200 gọi vào)
 header("Access-Control-Allow-Origin: http://localhost:4200");
@@ -19,7 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
     exit();
 }
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // 3. Kết nối Database
 $database = new Database();
 $conn = $database->connect(); // Lấy biến PDO Connection
@@ -34,4 +55,6 @@ $uri = trim($uri, '/'); // Loại bỏ dấu / thừa
 // 5. Gọi Router (Truyền $conn vào)
 $router = new Router($conn);
 $router->handle($uri);
+
+
 ?>

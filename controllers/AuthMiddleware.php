@@ -1,6 +1,14 @@
 <?php
-class AuthMiddleware {
 
+    require_once __DIR__ . './../models/User.php';
+
+class AuthMiddleware {
+    private $userModel;
+    public function __construct($db)
+    {
+       $this->userModel = new User($db);
+    }
+    
     public function isAuthenticated() {
         $headers = apache_request_headers();
         $clientToken = null;
@@ -57,7 +65,7 @@ class AuthMiddleware {
              $this->returnError("Token sai.");
         }
 
-        if($_SESSION['user_id'] != 11){
+        if($_SESSION['user_id'] != 18){
             $this->returnError("Token khong phải của admin");
         }
         // -------------------------------
@@ -66,7 +74,79 @@ class AuthMiddleware {
         return true;
     }
 
-    private function returnError($msg) {
+
+    
+    //hàm check token của employee
+    public function isAuthenticatedEmployee() {
+        $headers = apache_request_headers();
+        $clientToken = null;
+
+        // 1. Lý token khách gửi lên (từ Header)
+        if (isset($headers['Authorization'])) {
+            $matches = array();
+            preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches);
+            if (isset($matches[1])) {
+                $clientToken = $matches[1];
+            }
+        }
+
+        // 2. Kiem tra co Session khong?
+        // (Nhung session het han hoac chua login, bien nay se khong ton tai)
+        if (!isset($_SESSION['app_token'])) {
+             $this->returnError("Phien dang nhap da het han hoac chua dang nhap.");
+        }
+
+        // 3. --- SO SANH (QUAN TRONG) ---
+        // Token khach gui == Token minh luu trong Session?
+        if ($clientToken !== $_SESSION['app_token'] ) {
+             $this->returnError("Token sai.");
+        }
+
+        if($this->userModel->checkEmployer($_SESSION['user_id'])){
+            $this->returnError("Token khong phai cua nhan vien");
+        }
+        // -------------------------------
+
+        // Khop 100% -> Cho qua
+        return true;
+        }
+
+    //hàm check customer
+    public function isAuthenticatedCustomer() {
+        $headers = apache_request_headers();
+        $clientToken = null;
+
+        // 1. Lý token khách gửi lên (từ Header)
+        if (isset($headers['Authorization'])) {
+            $matches = array();
+            preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches);
+            if (isset($matches[1])) {
+                $clientToken = $matches[1];
+            }
+        }
+
+        // 2. Kiem tra co Session khong?
+        // (Nhung session het han hoac chua login, bien nay se khong ton tai)
+        if (!isset($_SESSION['app_token'])) {
+             $this->returnError("Phien dang nhap da het han hoac chua dang nhap.");
+        }
+
+        // 3. --- SO SANH (QUAN TRONG) ---
+        // Token khach gui == Token minh luu trong Session?
+        if ($clientToken !== $_SESSION['app_token'] ) {
+             $this->returnError("Token sai.");
+        }
+
+        if($this->userModel->checkCustomer($_SESSION['user_id'])){
+            $this->returnError("Token khong phai cua khach hang");
+        }
+        // -------------------------------
+
+        // Khop 100% -> Cho qua
+        return true;
+        }
+   
+        private function returnError($msg) {
         http_response_code(401);
         echo json_encode(["status" => "error", "message" => $msg]);
         exit();

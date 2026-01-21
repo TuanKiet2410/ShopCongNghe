@@ -27,7 +27,7 @@ class InvoiceDetailController {
         // --- BƯỚC QUAN TRỌNG NHẤT ---
         // Trong Model bạn khai báo public $invoice_id, nên ở đây phải gán đúng vào nó.
         // KHÔNG ĐƯỢC GÁN: $this->model->id = $id_invoice (Sai)
-        $this->model->invoice_id = $id_invoice; 
+        $this->model->id_invoice = $id_invoice; 
 
         // Gọi hàm
         $stmt = $this->model->getByInvoiceId();

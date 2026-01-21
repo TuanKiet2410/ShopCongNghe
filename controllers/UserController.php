@@ -6,7 +6,7 @@ class UserController {
     private $authMiddleware;
     public function __construct($db) {
         $this->userModel = new User($db);
-        $this->authMiddleware = new AuthMiddleware();
+        $this->authMiddleware = new AuthMiddleware($db);
     }
 
     public function processRequest($id) {
@@ -27,6 +27,10 @@ class UserController {
                 $this->create();
                 break;
             case 'PUT':
+                if(isset($_GET['permission'])) { // --- THÊM ---
+                    $this->updatePermission($id);
+                    break;
+                }
                 $this->update($id);
                 break;
             case 'DELETE':
@@ -43,22 +47,27 @@ class UserController {
 
     // 1. Lấy danh sách
     private function getAll() {
-        //lớp bảo vệ check admin
-        $this->authMiddleware->isAuthenticatedAdmin();
+    // lớp bảo vệ check admin
 
+    $stmt = $this->userModel->getAll();
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-        //----------------------
-
-
-
-
-
-        $stmt = $this->userModel->getAll();
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($users);
+    // 🔥 CHUYỂN permission TEXT → ARRAY
+    foreach ($users as &$user) {
+        if (!empty($user['permission'])) {
+            $user['permission'] = array_values(
+                array_filter(
+                    array_map('trim', explode(',', $user['permission']))
+                )
+            );
+        } else {
+            $user['permission'] = [];
+        }
     }
+
+    echo json_encode($users);
+}
+
 
     // 2. Lấy chi tiết 1 user
     private function getOne($id) {
@@ -121,9 +130,12 @@ class UserController {
         // Nếu client không gửi trường nào đó, ta nên giữ nguyên giá trị cũ hoặc gán rỗng.
         // Ở đây giả sử client gửi đủ, hoặc dùng toán tử ?? để tránh lỗi null.
         
-        $this->userModel->username = $data->username; 
+        $this->userModel->username = $data->username;
+        $this->userModel->fullname = $data->fullname;
+        $this->userModel->email = $data->email;
+        $this->userModel->address = $data->address;
+        $this->userModel->phone = $data->phone; 
         $this->userModel->role = $data->role;
-        $this->userModel->permission = $data->permission ?? 'view'; // --- THÊM ---
         $this->userModel->is_locked = $data->is_locked ?? 0;       // --- THÊM ---
 
         if($this->userModel->update()) {
@@ -144,6 +156,43 @@ class UserController {
         } else {
             http_response_code(503);
             echo json_encode(["message" => "User not deleted"]);
+        }
+    }
+
+    //update permisson
+  // update permisson
+    private function updatePermission($id) {
+        // 1. Lấy dữ liệu
+        $input = json_decode(file_get_contents("php://input"), true);
+        
+        // 2. Kiểm tra dữ liệu đầu vào
+        if (!isset($input['permission'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Missing permission data"]);
+            return;
+        }
+
+        // 3. Xử lý mảng thành chuỗi (ví dụ: ['A', 'B'] -> "A,B")
+        $permissions = $input['permission'];
+        
+        // Kiểm tra nếu permissions là mảng thì mới implode, nếu là string thì giữ nguyên (đề phòng)
+        if (is_array($permissions)) {
+            $permissionString = implode(',', $permissions);
+        } else {
+            $permissionString = $permissions;
+        }
+
+        // 4. Gán vào Model
+        $this->userModel->id = $id;
+        $this->userModel->permission = $permissionString;
+
+        // 5. Gọi hàm update và trả về JSON (TUYỆT ĐỐI KHÔNG var_dump/echo gì khác)
+        if($this->userModel->updatePermission()) {
+            http_response_code(200);
+            echo json_encode(["message" => "User permission updated"]);
+        } else {
+            http_response_code(503);
+            echo json_encode(["message" => "User permission not updated"]);
         }
     }
 }

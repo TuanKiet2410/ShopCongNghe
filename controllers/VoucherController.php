@@ -24,12 +24,13 @@ class VoucherController {
     }
         private function create() {
         $data = json_decode(file_get_contents("php://input"));
-        $this->model->discount_value = $data->discount_value;
+        $this->model->discount_value = $data->discount;
         $this->model->description = $data->description;
         $this->model->start_date = $data->start_date; // Định dạng YYYY-MM-DD
         $this->model->end_date = $data->end_date;
         $this->model->quantity = $data->quantity;
         $this->model->image = $data->image ?? '';
+        $this->model->code = $data->code;
 
         if($this->model->create()) {
              http_response_code(201); echo json_encode(["message" => "Voucher Created"]);
@@ -56,12 +57,13 @@ class VoucherController {
     private function update($id) {
         $data = json_decode(file_get_contents("php://input"));
         $this->model->id = $id;
-        $this->model->discount_value = $data->discount_value;
+        $this->model->discount_value = $data->discount;
         $this->model->description = $data->description;
         $this->model->start_date = $data->start_date;
         $this->model->end_date = $data->end_date;
         $this->model->quantity = $data->quantity;
         $this->model->image = $data->image ?? '';
+        $this->model->code = $data->code;
 
         if($this->model->update()) {
             echo json_encode(["message" => "Voucher Updated"]);

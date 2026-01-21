@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Ninja Clone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 1. Cài đặt chung */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            flex-wrap: wrap; /* Để responsive trên màn hình nhỏ */
+            justify-content: center;
+        }
+
+        /* 2. Style cơ bản cho các thẻ (Card) */
+        .card {
+            width: 280px;
+            height: 500px;
+            background-color: #0c0c0c; /* Màu nền đen xám */
+            position: relative;
+            overflow: hidden; /* Quan trọng: để cắt các đường chéo thừa */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid #1a1a1a;
+        }
+
+        /* Màu sắc chủ đạo */
+        .text-blue { color: #2D9CDB; }
+        .text-purple { color: #9B51E0; }
+        .text-orange { color: #F2994A; }
+        
+        /* Các đường kẻ chéo trang trí */
+        .diagonal-bar {
+            position: absolute;
+            height: 15px;
+            width: 150%;
+            left: -25%;
+            transform: rotate(-15deg);
+            z-index: 1;
+        }
+
+        /* --- CARD 1: FIGMA NINJA --- */
+        .card-1 .icon-wrapper {
+            font-size: 80px;
+            color: #27AE60; /* Màu xanh lá ninja */
+            margin-bottom: 40px;
+            z-index: 2;
+            text-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+        }
+        
+        .card-1 h1 {
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1;
+            z-index: 2;
+            text-transform: uppercase;
+        }
+
+        .card-1 .bar-purple {
+            background-color: #9B51E0;
+            top: 45%;
+        }
+        .card-1 .bar-orange {
+            background-color: #F26624;
+            bottom: 25%;
+        }
+
+        /* --- CARD 2: SPEED UP --- */
+        .card-2 {
+            align-items: flex-start; /* Căn trái */
+            padding-left: 30px;
+        }
+        .card-2 h2 {
+            font-size: 48px;
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+
+        /* --- CARD 3: INSTRUCTIONS --- */
+        .card-3 {
+            justify-content: space-between;
+            padding: 60px 20px 0 20px;
+        }
+        .card-3 .text-top h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .card-3 .ninja-image {
+            width: 100%;
+            height: 250px;
+            /* Placeholder ảnh ninja ngồi */
+            background: url('https://images.unsplash.com/photo-1514539079130-25950c84af65?q=80&w=800&auto=format&fit=crop') center/cover no-repeat;
+            filter: grayscale(100%) brightness(0.6);
+            mask-image: linear-gradient(to top, black 50%, transparent 100%); /* Hiệu ứng mờ dần */
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
+        }
+
+        /* --- CARD 4: ADVANCE --- */
+        .card-4 {
+            justify-content: flex-start;
+            padding-top: 80px;
+        }
+        
+        .card-4 .bar-purple-top {
+            background-color: #9B51E0;
+            top: 15%;
+            transform: rotate(-12deg);
+        }
+        
+        .card-4 .bar-orange-bottom {
+            background-color: #F26624;
+            bottom: 15%;
+            transform: rotate(-12deg);
+        }
+
+        .card-4 h3 {
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            z-index: 2;
+        }
+
+        .card-4 .keys-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .card-4 .label {
+            font-size: 14px;
+            color: #666;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .keys-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .key {
+            background-color: #eee;
+            color: #000;
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            box-shadow: 0 4px 0 #999; /* Hiệu ứng 3D cho phím */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card card-1">
+            <div class="diagonal-bar bar-purple"></div>
+            <div class="icon-wrapper">
+                <i class="fa-solid fa-user-ninja"></i>
+            </div>
+            <h1>
+                <span class="text-blue">Figma</span><br>
+                Ninja
+            </h1>
+            <div class="diagonal-bar bar-orange"></div>
+        </div>
+
+        <div class="card card-2">
+            <h2>
+                Speed<br>
+                Up<br>
+                Your<br>
+                Figma<br>
+                Skills
+            </h2>
+        </div>
+
+        <div class="card card-3">
+            <div class="text-top">
+                <h3>Read<br>Carefully</h3>
+                <h3>Follow<br>Instructions</h3>
+            </div>
+            <div class="ninja-image"></div>
+        </div>
+
+        <div class="card card-4">
+            <div class="diagonal-bar bar-purple-top"></div>
+            
+            <h3>Advance to<br>Next Level</h3>
+            
+            <div class="keys-section">
+                <div class="label">Press Keys</div>
+                <div class="keys-container">
+                    <div class="key">FN</div>
+                    <div class="key"><i class="fa-solid fa-arrow-down"></i></div>
+                </div>
+            </div>
+
+            <div class="diagonal-bar bar-orange-bottom"></div>
+        </div>
+    </div>
+
+</body>
+</html>

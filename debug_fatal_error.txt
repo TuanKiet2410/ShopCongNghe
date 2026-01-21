@@ -1,0 +1,1 @@
+Lỗi tại C:\xampp\htdocs\DA_CD_PHP\models\Invoice.php dòng 31: Giỏ hàng rỗng, không thể tạo đơn hàng.

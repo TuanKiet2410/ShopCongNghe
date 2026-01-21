@@ -6,7 +6,7 @@ class Database {
     // Dùng '
 private $host = "127.0.0.1";
 private $port = "3308";
-private $db_name = "shoptk";
+private $db_name = "mobileshop";
 private $username = "root";
 private $password = "";
 public $conn;

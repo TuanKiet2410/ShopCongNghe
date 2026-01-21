@@ -1,0 +1,57 @@
+# Báo cáo tổng quan Project
+
+## 1. Công nghệ sử dụng
+
+### a. Backend
+- **Ngôn ngữ:** PHP (Phiên bản không xác định rõ, nhưng là PHP thuần).
+- **Kiến trúc:** Tự xây dựng theo mô hình gần giống MVC (Model-View-Controller).
+    - **Routing:** Hệ thống định tuyến tùy chỉnh (`router/Router.php`) để xử lý các yêu cầu HTTP và điều hướng đến Controller phù hợp.
+    - **Controllers:** Xử lý logic nghiệp vụ cho từng tài nguyên (VD: `ProductController.php`, `UserController.php`).
+    - **Models:** Đại diện cho cấu trúc dữ liệu và tương tác với cơ sở dữ liệu (VD: `Product.php`, `User.php`).
+    - **Database:** Sử dụng PDO để tương tác với cơ sở dữ liệu.
+- **Cơ sở dữ liệu:** MySQL (dựa trên file `config/database.php` với `db_name = "mobileshop"`).
+- **API:** Cung cấp RESTful API để phía frontend có thể tương tác (GET, POST, PUT, DELETE).
+- **Xác thực:** Sử dụng cơ chế xác thực tùy chỉnh (`AuthController.php`, `AuthMiddleware.php`) để bảo vệ các API.
+
+### b. Frontend
+- **Framework:** Angular (phiên bản `~20.3.0` dựa trên `package.json`).
+- **Ngôn ngữ:** TypeScript.
+- **Giao diện người dùng (UI):**
+    - **Thư viện:** Bootstrap 5 (`^5.3.8`).
+    - **Icons:** Bootstrap Icons (`^1.13.1`).
+- **Quản lý state:** Sử dụng Angular Signals (`signal`) trong các service để quản lý trạng thái dữ liệu (VD: `product-service.ts`).
+- **Giao tiếp Backend:** Sử dụng `HttpClient` của Angular để gọi các API từ backend PHP.
+- **Routing:** Sử dụng `RouterModule` của Angular để điều hướng trong ứng dụng Single Page Application (SPA).
+
+## 2. Các chức năng chính của hệ thống
+
+Dựa trên cấu trúc file controller, service và component, các chức năng chính bao gồm:
+
+### a. Phía người dùng (Client)
+- **Trang chủ:** Hiển thị thông tin chung, sản phẩm nổi bật.
+- **Xác thực người dùng:** Đăng ký, đăng nhập, đăng xuất, quên mật khẩu.
+- **Xem sản phẩm:**
+    - Liệt kê danh sách sản phẩm.
+    - Phân trang, tìm kiếm, và lọc sản phẩm (theo tên, loại, thương hiệu, khoảng giá).
+    - Xem chi tiết thông tin một sản phẩm.
+- **Giỏ hàng:** Thêm, xóa, cập nhật số lượng sản phẩm trong giỏ hàng.
+- **Thanh toán (Checkout):** Đặt hàng từ giỏ hàng.
+- **Khuyến mãi:** Xem các chương trình khuyến mãi, voucher.
+
+### b. Phía quản trị (Admin Dashboard)
+- **Bảng điều khiển (Dashboard):** Giao diện tổng quan cho quản trị viên.
+- **Quản lý người dùng:** Thêm, sửa, xóa, xem danh sách người dùng.
+- **Quản lý sản phẩm:** Thêm, sửa, xóa, xem danh sách sản phẩm.
+- **Quản lý đơn hàng (Hóa đơn):** Xem và xử lý các đơn hàng từ người dùng.
+- **Quản lý khuyến mãi/Voucher:** Tạo và quản lý các mã giảm giá.
+- **Quản lý phân quyền:** Quản lý quyền truy cập cho các vai trò khác nhau trong hệ thống.
+- **Quản lý Banner:** Quản lý các hình ảnh quảng cáo trên trang chủ.
+- **Chức năng Chat:** Có `ChatController`, cho thấy khả năng có một tính năng chat/hỗ trợ.
+
+## 3. Cấu trúc Project
+- **Backend (PHP):** Nằm ở thư mục gốc, bao gồm các thư mục `controllers`, `models`, `router`, `config`.
+- **Frontend (Angular):** Nằm trong thư mục `frontend/angula_php`.
+- **Điểm vào (Entry Point):**
+    - **Backend:** `index.php` nhận tất cả các yêu cầu và chuyển cho `Router.php`.
+    - **Frontend:** `frontend/angula_php/src/main.ts` khởi tạo ứng dụng Angular.
+- **Giao tiếp:** Frontend (Angular) gọi API do Backend (PHP) cung cấp thông qua HTTP requests. URL API chính là `http://localhost/DA_CD_PHP/{resource}`.

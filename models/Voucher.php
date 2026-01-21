@@ -10,6 +10,7 @@ class Voucher {
     public $start_date;
     public $end_date;
     public $quantity;
+    public $code;
 
     public function __construct($db) { $this->conn = $db; }
 
@@ -21,7 +22,7 @@ class Voucher {
     }
 
     public function create() {
-        $query = "INSERT INTO " . $this->table . " SET discount_value=:discount_value, description=:description, start_date=:start_date, end_date=:end_date, quantity=:quantity, image=:image";
+        $query = "INSERT INTO " . $this->table . " SET code=:code, discount=:discount_value, description=:description, start_date=:start_date, end_date=:end_date, quantity=:quantity, image=:image";
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(':discount_value', $this->discount_value);
@@ -30,6 +31,7 @@ class Voucher {
         $stmt->bindParam(':end_date', $this->end_date);
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':image', $this->image);
+        $stmt->bindParam(':code', $this->code);
 
         if($stmt->execute()) return true;
         return false;
@@ -48,12 +50,13 @@ class Voucher {
             $this->end_date = $row['end_date'];
             $this->quantity = $row['quantity'];
             $this->image = $row['image'];
+            $this->code = $row['code'];
             return true;
         }
         return false;
     }
     public function update() {
-        $query = "UPDATE " . $this->table . " SET discount_value=:discount_value, description=:description, start_date=:start_date, end_date=:end_date, quantity=:quantity, image=:image WHERE id=:id";
+        $query = "UPDATE " . $this->table . " SET code=:code, discount=:discount_value, description=:description, start_date=:start_date, end_date=:end_date, quantity=:quantity, image=:image WHERE id=:id";
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(':discount_value', $this->discount_value);
@@ -63,6 +66,7 @@ class Voucher {
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':image', $this->image);
         $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':code', $this->code);
 
         if($stmt->execute()) return true;
         return false;

@@ -7,9 +7,7 @@ import { CheckoutComponent } from './pages/checkout/checkout';
 import { DashboardComponent } from './admin/dashboard/dashboard';
 import { UserManagerComponent } from './admin/user-manager/user-manager';
 import { ProductManagerComponent } from './admin/product-manager/product-manager';
-import { BannerManagerComponent } from './admin/banner-manager/banner-manager';
 import { OrderManagerComponent } from './admin/order-manager/order-manager';
-import { RoleManagerComponent } from './admin/role-manager/role-manager';
 import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password';
@@ -17,8 +15,11 @@ import { Permissionmanager } from './admin/permissionmanager/permissionmanager';
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
 import { buyGuard } from './guards/buy-guard';
+import { Promotionmanager } from './admin/promotionmanager/promotionmanager';
 
 export const routes: Routes = [
+  //path mặc định
+    {path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: 'home', component: HomeComponent },
     { path: 'products', component: ProductListComponent },
     { path: 'promotions', component: PromotionsComponent },
@@ -33,10 +34,10 @@ export const routes: Routes = [
       { path: '', redirectTo: 'users', pathMatch: 'full' }, // Mặc định vào User
       { path: 'users', component: UserManagerComponent },
       { path: 'products', component: ProductManagerComponent },
-      { path: 'banners', component: BannerManagerComponent },
       { path: 'orders', component: OrderManagerComponent },
-      { path: 'roles', component: RoleManagerComponent },
       { path: 'permissions', component: Permissionmanager },
+      { path: 'voucher', component: Promotionmanager },
+
 
     ],
     canActivate: [authGuard,adminGuard],

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { userNameManageInterface } from '../../interface/user-manager-interface';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,29 +14,21 @@ export class AuthService {
   constructor(private http: HttpClient) {
     
   }
-Signin(username: string, password: string ) {
-  return this.http
-    .post<any>(`${this.apiUrl}/login`, { username, password })
-    .subscribe({
-      next: (res) => {
+  Signin(username: string, password: string) {
+    return this.http.post<any>(`${this.apiUrl}/login`, { username, password }, { withCredentials: true }).pipe(
+      tap(res => {
         console.log('API success:', res);
         this.isLogin.set(true);
         localStorage.setItem('username', res.data.username);
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.data));
-        
-
-
-
         console.log('Token đã lưu:', localStorage.getItem('token'));
-      },
-      error: (err) => {
-        console.error('API error:', err);
-      }
-    });
-}
+      })
+    );
+  }
 
 signOut(){
+  localStorage.clear();
   this.http.get<any>(`${this.apiUrl}/logout`).subscribe(data=>{
     console.log(data);
   })

@@ -8,6 +8,25 @@
         placeholder="Tên User..."
         [(ngModel)]="newUser.username"
       />
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Full name..."
+        [(ngModel)]="newUser.fullname"
+      />
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Email..."
+        [(ngModel)]="newUser.email"
+
+      />
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Address..."
+        [(ngModel)]="newUser.address"
+      />
       <select class="form-select form-select-sm" [(ngModel)]="newUser.role">
         <option value="Admin">Admin</option>
         <option value="Employer">Employer</option>
@@ -35,9 +54,9 @@
             <span class="badge bg-secondary">{{ u.role }}</span>
           </td>
           <td>
-            <span class="badge" [ngClass]="u.is_locked==1 ? 'bg-danger' : 'bg-success'">
+            <button class="badge" (click)="toggleLock(u)" [ngClass]="u.is_locked==1 ? 'bg-danger' : 'bg-success'">
               {{ u.is_locked==1 ? 'Đã khóa' : 'Hoạt động' }}
-            </span>
+            </button>
           </td>
           <td>
             <button class="btn btn-warning btn-sm me-2"

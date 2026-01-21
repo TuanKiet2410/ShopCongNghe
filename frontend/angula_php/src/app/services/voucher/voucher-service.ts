@@ -26,7 +26,14 @@ export class VoucherService {
     return this.http.post<VoucherInterface>(this.apiurl, voucher);
   }
   updateVoucher(id: number, voucher: VoucherInterface) {
-    return this.http.put<VoucherInterface>(`${this.apiurl}/${id}`, voucher);
+    return this.http.put<VoucherInterface>(`${this.apiurl}/${id}`, voucher).subscribe({
+        next: (res) => {
+          alert('Cập nhật thành công!');
+          
+          this.loadVouchers();
+        },
+        error: (err) => alert('Lỗi cập nhật: ' + err.error.message)
+      });;
   }
   deleteVoucher(id: number) {
     return this.http.delete(`${this.apiurl}/${id}`);

@@ -13,7 +13,14 @@ export class LoginComponent {
   constructor(private router: Router) {}
 
   onLogin() {
-   this.authService.Signin(this.loginData.username, this.loginData.password);
-    this.router.navigate(['/']);
+    this.authService.Signin(this.loginData.username, this.loginData.password)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Login failed:', err);
+        }
+      });
   }
 }

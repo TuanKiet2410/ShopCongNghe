@@ -20,7 +20,11 @@ users=computed<any[]>(()=> this.userService.user_list())
 authService= inject(AuthService)
  editablePermissions: string[]=['create', 'update', 'delete','buy'];
 hasPermission(user: userNameManageInterface, perm: string): boolean {
- 
+  if (user.permission) {
+    if (user.permission.includes('all')) {
+      return true;
+    }
+  }
   return user.permission?.includes(perm) ?? false;
 }
 

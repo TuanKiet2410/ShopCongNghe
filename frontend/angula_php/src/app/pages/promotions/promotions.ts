@@ -22,13 +22,13 @@ interface Promotion {
   styleUrls: ['./promotions.css']
 })
 export class PromotionsComponent implements OnInit {
-  vouchetrService = inject(VoucherService)
-  promotions_list =computed(() => this.vouchetrService.vouchers_signal())
+  voucherService = inject(VoucherService)
+  promotions_list =computed(() => this.voucherService.vouchers_signal())
 
   constructor() { }
 
   ngOnInit(): void {
-    this.vouchetrService.loadVouchers();
+    this.voucherService.loadVouchers();
   }
   isActive: boolean = true;
   // Hàm copy mã giảm giá

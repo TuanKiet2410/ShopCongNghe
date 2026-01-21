@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RoleManager } from './role-manager';
+import { Promotionmanager } from './promotionmanager';
 
-describe('RoleManager', () => {
-  let component: RoleManager;
-  let fixture: ComponentFixture<RoleManager>;
+describe('Promotionmanager', () => {
+  let component: Promotionmanager;
+  let fixture: ComponentFixture<Promotionmanager>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoleManager]
+      imports: [Promotionmanager]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RoleManager);
+    fixture = TestBed.createComponent(Promotionmanager);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

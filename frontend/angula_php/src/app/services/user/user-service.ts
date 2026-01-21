@@ -13,6 +13,8 @@ export class UserService {
     this.loadUser();
   }
   loadUser() {
+    
+
     return this.http.get<userNameManageInterface[]>(this.apiUrl).subscribe({
       next: (reponse) => {
         console.log("dữ liệu từ server", reponse);

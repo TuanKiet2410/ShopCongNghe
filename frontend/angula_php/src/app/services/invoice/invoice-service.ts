@@ -23,11 +23,13 @@ loadInvoices() { return this.http.get<any>(`${this.apiUrl}`).subscribe({
 }
 
 
+
 updateStatusInvoice(id: number, invoice: any) {
    const isConfirm = confirm('Bạn có chắc chắn muốn up date thành :'+ invoice.status);
 
   if (!isConfirm) return;
   return this.http.put(`${this.apiUrl}/${id}`, invoice).subscribe({
+
     next: (reponse) => {
       console.log("dữ liệu từ server", reponse);
       this.loadInvoices();
@@ -40,7 +42,7 @@ updateStatusInvoice(id: number, invoice: any) {
 
 deleteInvoice($id: number) {
   return this.http.delete(`${this.apiUrl}/${$id}`).subscribe({
-    next: (reponse) => {
+    next: (response) => {
       console.log("đã xóa invoice");
       this.loadInvoices();
     },

@@ -6,7 +6,7 @@
       @for (inv of invoices(); track $index) {
         <tr>
         <td>{{ inv.id }}</td>
-        <td>{{inv.user_id}}</td>
+        <td>{{inv.fullname}}</td>
         <td>{{inv.total_money}}</td>
         <td><span class="badge bg-warning text-dark">{{inv.status}}</span></td>
         <td>

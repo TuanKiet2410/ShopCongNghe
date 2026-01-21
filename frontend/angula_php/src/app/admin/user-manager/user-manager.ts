@@ -31,7 +31,11 @@ export class UserManagerComponent implements OnInit {
 
   authService = inject(AuthService);
 
-  newUser = { 
+  newUser = {
+    fullname:'',
+    email:'',
+    phone:'',
+    address:'',
     username: '',
     password: '123456', 
     role: '' ,
@@ -50,9 +54,11 @@ export class UserManagerComponent implements OnInit {
     this.userService.deleteUser(id);
   }
 
-  toggleLock(user: userNameManageInterface) {
+  toggleLock(user: any) {
+    
     const updateLock={...user, is_locked: user.is_locked == 1 ? 0 : 1}
     this.userService.updateUser(user.id!, updateLock);
+    console.log(updateLock)
   }
 
   idEdit: number = 0;

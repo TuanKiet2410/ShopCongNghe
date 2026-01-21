@@ -1,0 +1,138 @@
+<div class="container mt-4">
+  <h2 class="text-primary mb-4 text-center">Quản Lý Mã Giảm Giá (Voucher)</h2>
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">{{ isEditMode ? 'Cập Nhật Voucher' : 'Thêm Voucher Mới' }}</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="voucherForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Mã Voucher (*)</label>
+              <input type="text" class="form-control" formControlName="code" />
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label">Mức giảm (VNĐ)</label>
+                <input type="number" class="form-control" formControlName="discount" />
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">Số lượng</label>
+                <input type="number" class="form-control" formControlName="quantity" />
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Ngày bắt đầu</label>
+              <input type="datetime-local" class="form-control" formControlName="start_date" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Ngày kết thúc</label>
+              <input type="datetime-local" class="form-control" formControlName="end_date" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Chọn ảnh</label>
+              <input type="file" class="form-control" accept="image/*" (change)="onImageChange($event)" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Mô tả</label>
+              <textarea class="form-control" rows="2" formControlName="description"></textarea>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success">
+                <i class="bi bi-save"></i> {{ isEditMode ? 'Lưu Thay Đổi' : 'Tạo Mới' }}
+              </button>
+              <button
+                *ngIf="isEditMode"
+                type="button"
+                class="btn btn-secondary"
+                (click)="resetForm()"
+              >
+                Hủy Bỏ
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Danh sách Voucher hiện có</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Ảnh</th>
+                <th>Mã Code</th>
+                <th>Thông tin</th>
+                <th>Thời hạn</th>
+                <th class="text-center">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let v of vouchers()">
+                <td>
+                  <img
+                    [src]="v.image || ''"
+                    alt="icon"
+                    class="rounded"
+                    width="50"
+                    height="50"
+                    style="object-fit: cover"
+                  />
+                </td>
+
+                <td>
+                  <span class="badge bg-success mb-1">{{ v.code }}</span><br />
+                  <small class="fw-bold text-danger">-{{ v.discount | number }}đ</small>
+                </td>
+
+                <td>
+                  <div>
+                    SL: <strong>{{ v.quantity }}</strong>
+                  </div>
+                  <small class="text-muted text-truncate d-block" style="max-width: 150px">
+                    {{ v.description }}
+                  </small>
+                </td>
+
+                <td>
+                  <small class="d-block text-muted"
+                    >Từ: {{ v.start_date | date : 'dd/MM/yyyy' }}</small
+                  >
+                  <small class="d-block text-muted"
+                    >Đến: {{ v.end_date | date : 'dd/MM/yyyy' }}</small
+                  >
+                </td>
+
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-primary me-2" (click)="onEdit(v)">
+                    <i class="bi bi-pencil-square"></i> Sửa
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="onDelete(v.id!)">
+                    <i class="bi bi-trash"></i> Xóa
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="vouchers.length === 0">
+                <td colspan="5" class="text-center py-4 text-muted">
+                  Chưa có mã giảm giá nào. Hãy tạo mới!
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
